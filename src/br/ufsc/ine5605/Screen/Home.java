@@ -26,14 +26,12 @@ public class Home extends JPanel implements IPanel{
         //botao de andar
         bt_floor = new JButton("Go to a Floor");
         bt_floor.setName(bt.FLOOR.name());
-        bt_floor.setMnemonic(1);
         bt_floor.addActionListener(new Action());
         add(bt_floor);
         
-        //botao de opçoes administrativas
+        //botao de opcoes administrativas
         bt_adm = new JButton("Administrative Options");
         bt_adm.setName(bt.ADMINISTRATIVE.name());
-        bt_adm.setMnemonic(2);
         bt_adm.addActionListener(new Action());
         add(bt_adm);
         
@@ -44,13 +42,12 @@ public class Home extends JPanel implements IPanel{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(e.getSource().equals(bt.FLOOR))
+            signal = signal.NEXT;
+            if(e.getSource().equals(bt.FLOOR) )
                 System.out.println("floor");
-            else
-                System.out.println("adm");
-                
-        }
-        
+            else if(e.getSource().equals(bt.ADMINISTRATIVE) )
+                System.out.println("adm");  
+        }  
     }
     
     @Override

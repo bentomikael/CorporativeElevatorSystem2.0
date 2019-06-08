@@ -9,7 +9,7 @@ public class MainControl {
     private EmployeeControl eControl;
     private ScreenControl screen;
     private ReportControl rControl;
-    private int[] options;  //usada para manipular as opçoes recebidas de tela
+    private int[] options;  //usada para manipular as opcoes recebidas de tela
     private Date date;
     private SimpleDateFormat format;
     private boolean logged; // usado para saber quando está logado
@@ -22,7 +22,7 @@ public class MainControl {
     }
     
     
-    //<editor-fold defaultstate="collapsed" desc="Manipulação de tempo">
+    //<editor-fold defaultstate="collapsed" desc="Manipulacão de tempo">
     private String getDate() {
         date = new Date();
         format = new SimpleDateFormat("dd/MM");
@@ -60,15 +60,14 @@ public class MainControl {
 
 //</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc="Controle de açoes por tela">
+    //<editor-fold defaultstate="collapsed" desc="Controle de acoes por tela">
     
     /**
      * @param actualAccessLevel nivel do usuario atual(recebe valor de start())
-     * Se usuario escolheu opção 1 vai pra tela de andares.
-     * Se usuario escolheru 2 vai pra tela de opçoes administrativas.
+     * Se usuario escolheu opcão 1 vai pra tela de andares.
+     * Se usuario escolheru 2 vai pra tela de opcoes administrativas.
     */
     private void home( int actualAccessLevel ) {
-        
         options[0] = screen.home( actualAccessLevel );
 
         switch(options[0]){
@@ -79,7 +78,6 @@ public class MainControl {
                 administrativeOptions();
                 break;
         }
-         new LogoutCheck().start();
     }
 
     private void floor(){
@@ -382,30 +380,4 @@ public class MainControl {
     /**
      * Thread que verifica constantemente se foi requisitado o logout  
      */
-    private class LogoutCheck extends Thread{
-        
-        public LogoutCheck() {
-            logged = true;
-        }
-        
-        @Override
-        public void run(){
-            
-            while(logged){
-                                
-                try {
-                    if(screen.getLogoutRequest())
-                        logout();
-                    sleep(15);
-                } catch (InterruptedException ex) {}
-                
-            }
-            //finaliza sempre que fizer logout para economizar processamento quando ocioso
-            try {
-                finalize();
-            }catch (Throwable ex) {}
-        }
-
-        
-    }
 }
