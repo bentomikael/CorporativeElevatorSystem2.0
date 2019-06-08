@@ -32,7 +32,7 @@ public class CorporativeElavatorSystem2 {
         
         new MainControl().start();
         
-         
+    
     }
     
 }

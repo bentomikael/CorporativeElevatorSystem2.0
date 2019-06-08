@@ -10,15 +10,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Login extends JPanel implements IPane{
+public class Login extends JPanel implements IPanel{
     
     private JButton bt_confirm;
     private JTextField code;
-    private int signal;
+    private Signal signal;
     
     public Login() {
         
-        signal = Signal.EMPITY.value;
+        signal = Signal.EMPITY;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx=0;
@@ -35,10 +35,11 @@ public class Login extends JPanel implements IPane{
         add(bt_confirm,gbc);
         bt_confirm.addActionListener(new Action());
     }
+    
     private class Action implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            signal = Signal.NEXT.value;     
+            signal = Signal.NEXT; 
         }
     }
    
@@ -47,7 +48,11 @@ public class Login extends JPanel implements IPane{
     }    
     
     @Override
-    public int getSignal(){
+    public Signal getSignal(){
         return signal;
+    }
+    
+    public void resetSignal(){
+        signal = Signal.EMPITY;
     }
 }

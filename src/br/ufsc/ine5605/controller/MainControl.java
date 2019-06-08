@@ -57,8 +57,6 @@ public class MainControl {
         logged = false;
         start();
        }
-    
-    
 
 //</editor-fold>
     
