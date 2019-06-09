@@ -29,18 +29,19 @@ public class Login extends JPanel implements IPanel{
         
         //text field
         add(code = new JTextField(10),gbc);
+        code.requestFocusInWindow();
         
         //confirma
         bt_confirm = new JButton("Sign in");
         add(bt_confirm,gbc);
+        
         bt_confirm.addActionListener(new Action());
+                
     }
     
-    private class Action implements ActionListener{
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            signal = Signal.NEXT; 
-        }
+    @Override
+    public void resetSignal(){
+        signal = Signal.EMPITY;
     }
    
     public String getCode(){
@@ -52,7 +53,12 @@ public class Login extends JPanel implements IPanel{
         return signal;
     }
     
-    public void resetSignal(){
-        signal = Signal.EMPITY;
+    private class Action implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            signal = Signal.NEXT; 
+            code.setText("");
+            
+        }
     }
 }

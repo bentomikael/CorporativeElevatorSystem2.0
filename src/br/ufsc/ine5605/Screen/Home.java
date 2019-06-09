@@ -11,9 +11,10 @@ import javax.swing.JPanel;
 
 public class Home extends JPanel implements IPanel{
     private Signal signal;
+    private Signal option;
     private JButton bt_floor;
     private JButton bt_adm;
-    private enum bt{FLOOR,ADMINISTRATIVE};
+   
     
     public Home() {
         signal = Signal.EMPITY;
@@ -22,39 +23,43 @@ public class Home extends JPanel implements IPanel{
        
         gbc.gridx = 0;
         gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.ipadx = 15;
+        gbc.ipady = 15;
         
         //botao de andar
-        bt_floor = new JButton("Go to a Floor");
-        bt_floor.setName(bt.FLOOR.name());
+        add(bt_floor = new JButton("Go to a Floor"),gbc);
+        bt_floor.setName(Signal.FLOOR.name());
         bt_floor.addActionListener(new Action());
-        add(bt_floor);
+        
         
         //botao de opcoes administrativas
-        bt_adm = new JButton("Administrative Options");
-        bt_adm.setName(bt.ADMINISTRATIVE.name());
+        add(bt_adm = new JButton("Administrative Options"),gbc);
+        bt_adm.setName(Signal.ADMNISTRATIVE.name());
         bt_adm.addActionListener(new Action());
-        add(bt_adm);
+        
         
     }
 
-    
-    private class Action implements ActionListener{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            signal = signal.NEXT;
-            if(e.getSource().equals(bt.FLOOR) )
-                System.out.println("floor");
-            else if(e.getSource().equals(bt.ADMINISTRATIVE) )
-                System.out.println("adm");  
-        }  
+    public Signal getOption(){
+        return option;
     }
     
     @Override
     public Signal getSignal() {
         return signal;
     }
+     @Override
+    public void resetSignal() {
+        signal = Signal.EMPITY;
+    }
 
-     
+    private class Action implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            option = (Signal)e.getSource();
+            signal = Signal.NEXT;
+        }  
+    }
     
 }

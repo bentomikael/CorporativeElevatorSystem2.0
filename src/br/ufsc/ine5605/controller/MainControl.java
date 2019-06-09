@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.controller;
 
 import br.ufsc.ine5605.Screen.ScreenControl;
+import static java.lang.Thread.sleep;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -44,18 +45,18 @@ public class MainControl {
      * Atribui o usuario atual e usa o nivel de acesso para iniciar home.
     */
     public void start(){ 
-        
         eControl.login( 
             screen.login(
             eControl.getCodes(
             eControl.getAllEmployees() )) );
-
-        home( eControl.getActualUserLevelNumber() );
+        
+        home();
+        
     }
     
-    private void logout(){
-        logged = false;
+    private void logout(){        
         start();
+        
        }
 
 //</editor-fold>
@@ -67,8 +68,11 @@ public class MainControl {
      * Se usuario escolheu opcão 1 vai pra tela de andares.
      * Se usuario escolheru 2 vai pra tela de opcoes administrativas.
     */
-    private void home( int actualAccessLevel ) {
-        options[0] = screen.home( actualAccessLevel );
+    private void home() {
+        new LogoutCheck().start();
+        
+        options[0] = screen.home(eControl.getActualUserName(),
+                eControl.getActualUserLevelNumber() );
 
         switch(options[0]){
             case 1:
@@ -380,4 +384,32 @@ public class MainControl {
     /**
      * Thread que verifica constantemente se foi requisitado o logout  
      */
+    private class LogoutCheck extends Thread{
+        
+        public LogoutCheck() {
+            logged = true;
+        }
+        
+        @Override
+        public void run(){
+            
+            while(logged){
+                                
+                try {
+                    if(screen.getLogoutRequest())
+                        logged = false;
+                    sleep(15);
+
+                } catch (InterruptedException ex) {}
+                
+            }
+            logout();
+            //finaliza sempre que fizer logout para economizar processamento quando ocioso
+            try {
+                finalize();
+            }catch (Throwable ex) {}
+        }
+
+        
+    }
 }
