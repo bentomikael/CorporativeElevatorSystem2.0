@@ -2,6 +2,8 @@ package br.ufsc.ine5605.Screen;
 
 
 public enum Signal {
+    //action map
+        ACTION,
     //geral
         EMPITY,
         NEXT,
