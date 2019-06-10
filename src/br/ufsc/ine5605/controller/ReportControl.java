@@ -4,61 +4,70 @@ import br.ufsc.ine5605.entity.Report;
 import java.util.ArrayList;
 
 public class ReportControl {
+
     private ArrayList<Report> reports;
+
+    public enum Type { NAME, ACTIVITY, DATE, HOUR, FLOOR}
+    public enum Activity{REGISTERED,REMOVED,CHANGED,GO_TO_FLOOR}
 
     public ReportControl() {
         reports = new ArrayList();
-        
+
     }
 
-    public void addReport(String employeeName, String activity, String thatName, 
-            String date, String hour, String floor){
-      
-        reports.add(new Report(employeeName,activity,thatName,date,hour,floor) );
+    public void addReport(String employeeName, Activity activity, String thatName,
+            String date, String hour, String floor) {
+
+        reports.add(new Report(employeeName, activity.toString(), thatName, date, hour, floor));
     }
-     
+
     public ArrayList<Report> getAllReports() {
         return reports;
     }
-    
-    public ArrayList getReportSpecific(String type,String value){
+
+    public ArrayList getReportSpecific(Type type, String activity) {
         ArrayList array = new ArrayList();
 
-        switch(type){
+        if (type == Type.NAME) {
+            for (Report r : reports) {
+                if (r.getEmployeeName().equals(activity)) {
+                    array.add(r);
+                }
+            }
+
+        } else if (type == Type.ACTIVITY) {
+            for (Report r : reports) {
+                if (r.getActivity().equals(activity)) {
+                    array.add(r);
+                }
+            }
             
-            case "name":
-                for(Report r:reports)
-                    if(r.getEmployeeName().equals(value))
-                        array.add(r);
-                break;
-                
-            case "activity":
-                for(Report r:reports)
-                    if(r.getActivity().equals(value))
-                        array.add(r);
-                break;
-                
-            case "date":
-                for(Report r:reports)
-                    if(r.getDate().equals(value))
-                        array.add(r);
-                break;
-                
-            case "hour":
-                for(Report r:reports)
-                    if(r.getHour().substring(0,2).equals(value))
-                        array.add(r);
-                break;
-                
-            case "floor":
-                for(Report r:reports)
-                    if(r.getFloor().equals(value))
-                        array.add(r);
-                break;
+        } else if (type == Type.DATE) {
+            for (Report r : reports) {
+                if (r.getDate().equals(activity)) {
+                    array.add(r);
+                }
+            }
+            
+        } else if (type == Type.HOUR) {
+            for (Report r : reports) {
+                if (r.getHour().substring(0, 2).equals(activity)) {
+                    array.add(r);
+                }
+            }
+            
+        } else if (type == Type.FLOOR) {
+            for (Report r : reports) {
+                if (r.getFloor().equals(activity)) {
+                    array.add(r);
+                }
+            }
         }
-        return array;
+       
+        return array ;
     }
-      
+
+    //apagar
     public void printIt (ArrayList<Report> array){
         
         if(array.isEmpty())

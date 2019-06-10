@@ -87,22 +87,20 @@ public class MainControl {
     private void floor(){
         
         options[0] = screen.floor(eControl.getActualUserLevelNumber());
-       
+
         if(options[0] != -1){
             try{
                 eControl.goToFloor(options[0]);
-                reportsRegister("floor");
+                reportsRegister(ReportControl.Activity.GO_TO_FLOOR.toString());
                 
                 if(options[0] == 0)
                     screen.mLeavingFloor();
                 else
                     screen.mWentInFloor(options[0]);
-                screen.mStandBy();
                 logout(); 
                 
             }catch(IllegalArgumentException e){
-                System.out.println(e.getMessage());
-                screen.mStandBy();
+                screen.mAlreadyInFloor();
                 floor();
             }
             
@@ -163,7 +161,7 @@ public class MainControl {
                                 options[0],
                                 eControl.convertGender(options[1]) );
 
-                            reportsRegister("new");
+                            reportsRegister(ReportControl.Activity.REGISTERED.toString());
                             screen.mStandBy();
                             home(eControl.getActualUserLevelNumber());
                         }
@@ -185,7 +183,7 @@ public class MainControl {
             eControl.getEmployeeByCode(options[0]).getName());
         
             if(options[1] == 1){
-                reportsRegister("del");
+                reportsRegister(ReportControl.Activity.REMOVED.toString());
                 eControl.removeEmployeeByCode(options[0]);
                 screen.mStandBy();
                 home(eControl.getActualUserLevelNumber());
@@ -208,7 +206,7 @@ public class MainControl {
                     eControl.getActualUserLevelNumber() );
                 
             if(options[1] != -1){
-                reportsRegister("change");      
+                reportsRegister(ReportControl.Activity.CHANGED.toString());      
 
                 eControl.changeOccupation(
                     options[0], 
@@ -229,7 +227,7 @@ public class MainControl {
                 options[1] = screen.reportScreenFloor();
                 if(options[1] != -1)
                     rControl.printIt(
-                    rControl.getReportSpecific("floor",
+                    rControl.getReportSpecific(ReportControl.Type.FLOOR,
                             Integer.toString(options[1]) ));
                 break;
                 
@@ -239,7 +237,7 @@ public class MainControl {
                         eControl.getAllEmployees() ));
                 if(options[1] != -1)
                     rControl.printIt(
-                    rControl.getReportSpecific("name",
+                    rControl.getReportSpecific(ReportControl.Type.NAME,
                     eControl.getEmployeeByCode(options[1]).getName() ));
                 break;
                 
@@ -262,7 +260,7 @@ public class MainControl {
                                 Integer.toString(options[2]);
 
                         rControl.printIt(
-                        rControl.getReportSpecific("date",dat));
+                        rControl.getReportSpecific(ReportControl.Type.DATE,dat));
                     }
                 }
                 break;
@@ -271,18 +269,18 @@ public class MainControl {
                 options[1] = screen.reportScreenHour();
                 if(options[1] != -1)
                     rControl.printIt(
-                    rControl.getReportSpecific("hour",
+                    rControl.getReportSpecific(ReportControl.Type.HOUR,
                             Integer.toString(options[1]) ));
                 break;
                 
             case 5:
-                rControl.printIt(rControl.getReportSpecific("activity",
-                        "Registered"));
+                rControl.printIt(rControl.getReportSpecific(ReportControl.Type.ACTIVITY,
+                        ReportControl.Activity.REGISTERED.toString()) );
                 break;
                 
             case 6:
-                rControl.printIt(rControl.getReportSpecific("activity",
-                        "Removed"));
+                rControl.printIt(rControl.getReportSpecific(ReportControl.Type.ACTIVITY,
+                        ReportControl.Activity.REMOVED.toString()));
                 break;
                 
             case 7:
@@ -338,7 +336,7 @@ public class MainControl {
             case "floor":
                                     
                 rControl.addReport(eControl.getActualUserName(),
-                "Go To Floor",
+                ReportControl.Activity.GO_TO_FLOOR,
                 "-",
                 getDate(),
                 getHour(),
@@ -349,7 +347,7 @@ public class MainControl {
             case "new":
                 
                 rControl.addReport(eControl.getActualUserName(),
-                "Registered",
+                ReportControl.Activity.REGISTERED,
                 eControl.getEmployeeByCode(options[2]).getName(),
                 getDate(),
                 getHour(),
@@ -360,7 +358,7 @@ public class MainControl {
             case "del":
                 
                 rControl.addReport(eControl.getActualUserName(),
-                "Removed",
+                ReportControl.Activity.REMOVED,
                 eControl.getEmployeeByCode(options[0]).getName(),
                 getDate(),
                 getHour(),
@@ -371,7 +369,7 @@ public class MainControl {
             case "change":
                 
                 rControl.addReport(eControl.getActualUserName(),
-                "Changed",
+                ReportControl.Activity.CHANGED,
                 eControl.getEmployeeByCode(options[0]).getName(),
                 getDate(),
                 getHour(),

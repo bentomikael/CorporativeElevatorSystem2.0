@@ -18,6 +18,7 @@ public class Home extends JPanel implements IPanel{
     
     public Home() {
         signal = Signal.EMPITY;
+        
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
        
@@ -57,7 +58,8 @@ public class Home extends JPanel implements IPanel{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            option = (Signal)e.getSource();
+                option = Signal.valueOf(
+                        ( (JButton)e.getSource() ).getName() );     
             signal = Signal.NEXT;
         }  
     }

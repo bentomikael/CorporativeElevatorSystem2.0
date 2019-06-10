@@ -10,55 +10,55 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Login extends JPanel implements IPanel{
-    
+public class Login extends JPanel implements IPanel {
+
     private JButton bt_confirm;
-    private JTextField code;
+    private JTextField tf_code;
     private Signal signal;
-    
+
     public Login() {
-        
         signal = Signal.EMPITY;
+
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx=0;
-        gbc.insets= new Insets(5, 5, 5, 5);
-        
+        gbc.gridx = 0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+
         //label
-        add(new JLabel("Insert Your Code Access:"),gbc);
-        
+        add(new JLabel("Insert Your Code Access:"), gbc);
+
         //text field
-        add(code = new JTextField(10),gbc);
-        code.requestFocusInWindow();
-        
+        add(tf_code = new JTextField(10), gbc);
+
         //confirma
         bt_confirm = new JButton("Sign in");
-        add(bt_confirm,gbc);
-        
+        add(bt_confirm, gbc);
+
         bt_confirm.addActionListener(new Action());
-                
+
     }
-    
+
+    public String getCode() {
+        return tf_code.getText();
+    }
+
     @Override
-    public void resetSignal(){
+    public void resetSignal() {
         signal = Signal.EMPITY;
     }
-   
-    public String getCode(){
-        return code.getText();
-    }    
-    
+
     @Override
-    public Signal getSignal(){
+    public Signal getSignal() {
         return signal;
     }
-    
-    private class Action implements ActionListener{
+
+    private class Action implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            signal = Signal.NEXT; 
-            code.setText("");
-            
+            signal = Signal.NEXT;
+
+            tf_code.setText("");
         }
     }
 }

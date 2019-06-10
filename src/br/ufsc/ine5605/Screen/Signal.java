@@ -22,10 +22,8 @@ public enum Signal {
         DEL_EMPLOYEE,
         CHANGE_EMPLOYEE,
         REPORTS,
-        LIST,
+        LIST;
         
-    
-    
-    ;        
+          
     
 }

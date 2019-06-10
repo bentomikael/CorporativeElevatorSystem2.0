@@ -2,6 +2,7 @@ package br.ufsc.ine5605.Screen;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -19,33 +20,37 @@ public class Floor extends JPanel implements IPanel{
 
     public Floor() {
         signal = Signal.EMPITY;
+        
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.ipady = 10;
         
         //ground
-        add(ground = new JButton(Signal.GROUND_FLOOR.name()),gbc);
+        add(ground = new JButton("GROUND FLOOR"),gbc);
         ground.setName(Signal.GROUND_FLOOR.name());
         ground.addActionListener(new Action());
         
         //first
-        add(first = new JButton(Signal.FIRST_FLOOR.name()),gbc);
+        add(first = new JButton("SIMPLE EMPLOYEE FLOOR"),gbc);
         first.setName(Signal.FIRST_FLOOR.name());
         first.addActionListener(new Action());
         
         //second
-        add(second = new JButton(Signal.SECOND_FLOOR.name()),gbc);
+        add(second = new JButton("MANAGER FLOOR"),gbc);
         second.setName(Signal.SECOND_FLOOR.name());
         second.addActionListener(new Action());
         //third
-        add(third = new JButton(Signal.THIRD_FLOOR.name()),gbc);
+        add(third = new JButton("ADMINISTRATIVE FLOOR"),gbc);
         third.setName(Signal.THIRD_FLOOR.name());
         third.addActionListener(new Action());
         //fourth
-        add(fourth = new JButton(Signal.FOURTH_FLOOR.name()),gbc);
+        add(fourth = new JButton("EXECUTIVE FLOOR"),gbc);
         fourth.setName(Signal.FOURTH_FLOOR.name());
         fourth.addActionListener(new Action());
         //fifth
-        add(fifth = new JButton(Signal.FIFTH_FLOOR.name()),gbc);
+        add(fifth = new JButton("CEO FLOOR"),gbc);
         fifth.setName(Signal.FIFTH_FLOOR.name());
         fifth.addActionListener(new Action());
     }
@@ -67,7 +72,9 @@ public class Floor extends JPanel implements IPanel{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-           option = (Signal)e.getSource();
+           option = Signal.valueOf(
+                   ( (JButton)e.getSource() ).getName() );
+                  
            signal = Signal.NEXT;
         
         }

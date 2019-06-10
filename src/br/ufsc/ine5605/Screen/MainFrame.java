@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 public class MainFrame extends JFrame implements IPanel{
     private JMenuBar menuBar;
     private JButton bt_logout;
-    private JLabel userName;
+    private JLabel lb_userName;
     private JPanel cards;
     private Signal signal;
     
@@ -22,24 +22,23 @@ public class MainFrame extends JFrame implements IPanel{
         
         super("Corporative Elevator System"); 
         Container c = getContentPane();
-        signal = Signal.EMPITY;
-        
         menuBar = new JMenuBar();
         cards = new JPanel(new CardLayout());
-        userName = new JLabel("");
+        lb_userName = new JLabel("");
         bt_logout = new JButton("Logout");
         menuBar.setLayout(new BorderLayout());
         
         bt_logout.addActionListener(new Action());
 
         c.add(cards);
-        menuBar.add(userName,BorderLayout.LINE_START); 
+        menuBar.add(lb_userName,BorderLayout.LINE_START); 
         menuBar.add(bt_logout,BorderLayout.LINE_END);
         
         setJMenuBar(menuBar);
-        setSize(300, 300);
-        setLocation(500, 300);
+        setSize(400, 400);
+        setLocation(500, 200);
         setVisible(true);
+        setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     
@@ -47,13 +46,18 @@ public class MainFrame extends JFrame implements IPanel{
         return cards;
     }
     
+    /**
+     * Quando logado mostrar menu bar personalizado
+     * @param logged está logado?
+     * @param name nome do usuario atual
+     */
     public void logged(boolean logged ,String name){
         if(logged){
             bt_logout.setVisible(true);
-            userName.setText("Hello " + name.toUpperCase());
+            lb_userName.setText("Hello " + name.toUpperCase());
         }else{
             bt_logout.setVisible(false);
-            userName.setText(" ");
+            lb_userName.setText(" ");
             signal = Signal.EMPITY;
         }
     }

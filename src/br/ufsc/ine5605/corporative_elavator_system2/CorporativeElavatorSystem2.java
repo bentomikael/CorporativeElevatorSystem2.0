@@ -32,7 +32,14 @@ public class CorporativeElavatorSystem2 {
         
         new MainControl().start();
         
-    
+    /*
+     * PIN
+     * 9999 CEO
+     * 8888 EXECUTIVE
+     * 7777 ADMINISTRATIVE
+     * 6666 MANAGER
+     * 5555 SIMPLE EMPLOYEE
+     */
     }
     
 }
