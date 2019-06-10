@@ -7,10 +7,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 public class Login extends JPanel implements IPanel {
 
@@ -20,8 +25,12 @@ public class Login extends JPanel implements IPanel {
 
     public Login() {
         signal = Signal.EMPITY;
+        InputMap inputM = new InputMap();
+        ActionMap actionM = new ActionMap();
+        actionM.put(Signal.ACTION, new Action()); 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        
         gbc.gridx = 0;
         gbc.insets = new Insets(5, 5, 5, 5);
 
@@ -30,7 +39,6 @@ public class Login extends JPanel implements IPanel {
 
         //text field
         add(tf_code = new JTextField(10), gbc);
-        tf_code.addKeyListener(new Key());
         tf_code.setFocusable(true);
         tf_code.setText("999");              //teste, depois apagar
 
@@ -38,7 +46,10 @@ public class Login extends JPanel implements IPanel {
         //confirma
         bt_confirm = new JButton("Sign in");
         add(bt_confirm, gbc);
+        inputM = bt_confirm.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputM.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), Signal.ACTION);
         bt_confirm.addActionListener(new Action());
+        bt_confirm.setActionMap(actionM);
 
     }
 
@@ -56,34 +67,12 @@ public class Login extends JPanel implements IPanel {
         return signal;
     }
 
-    private class Action implements ActionListener {
 
+   private class Action extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             signal = Signal.NEXT;
             tf_code.setText("");
         }
-    }
-
-    private class Key implements KeyListener {
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                signal = Signal.NEXT;
-                tf_code.setText("");
-            }
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            keyTyped(e);
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            keyTyped(e);
-        }
-
     }
 }

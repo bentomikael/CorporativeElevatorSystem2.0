@@ -8,6 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -35,7 +36,7 @@ public class Home extends JPanel implements IPanel {
         //botao de andar
         add(bt_floor = new JButton("1 - Go to a Floor"), gbc);
         bt_floor.setName(Signal.FLOOR.name());
-        inputM = bt_floor.getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        inputM = bt_floor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputM.put(KeyStroke.getKeyStroke('1'), Signal.ACTION);
         bt_floor.addActionListener(new Action());
         bt_floor.setActionMap(actionM);

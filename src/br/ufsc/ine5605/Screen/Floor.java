@@ -11,7 +11,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JButton;
-import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -41,7 +41,7 @@ public class Floor extends JPanel implements IPanel {
         //ground
         add(bt_ground = new JButton("0 - GROUND FLOOR"), gbc);
         bt_ground.setName(Signal.GROUND_FLOOR.name());
-        inputM = bt_ground.getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        inputM = bt_ground.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputM.put(KeyStroke.getKeyStroke('0'), Signal.ACTION);
         bt_ground.addActionListener(new Action());
         bt_ground.setActionMap(actionM);

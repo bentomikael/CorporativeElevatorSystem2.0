@@ -34,11 +34,11 @@ public class CorporativeElavatorSystem2 {
         
     /*
      * PIN
-     * 9999 CEO
-     * 8888 EXECUTIVE
-     * 7777 ADMINISTRATIVE
-     * 6666 MANAGER
-     * 5555 SIMPLE EMPLOYEE
+     * 999 CEO
+     * 888 EXECUTIVE
+     * 777 ADMINISTRATIVE
+     * 666 MANAGER
+     * 555 SIMPLE EMPLOYEE
      */
     }
     

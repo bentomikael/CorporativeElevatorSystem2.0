@@ -4,14 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 public class MainFrame extends JFrame implements IPanel {
 
@@ -25,14 +28,20 @@ public class MainFrame extends JFrame implements IPanel {
 
         super("Corporative Elevator System");
         Container c = getContentPane();
+        InputMap inputM = new InputMap();
+        ActionMap actionM = new ActionMap();
+        actionM.put(Signal.ACTION, new Action());  
+       
         menuBar = new JMenuBar();
         cards = new JPanel(new CardLayout());
         lb_userName = new JLabel("");
-        bt_logout = new JButton("ESC - Logout");
         menuBar.setLayout(new BorderLayout());
-
+        bt_logout = new JButton("ESC - Logout");
+        inputM = bt_logout.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputM.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0), Signal.ACTION);
+        
+        bt_logout.setActionMap(actionM);
         bt_logout.addActionListener(new Action());
-        bt_logout.addKeyListener(new Key());
         c.add(cards);
         menuBar.add(lb_userName, BorderLayout.LINE_START);
         menuBar.add(bt_logout, BorderLayout.LINE_END);
@@ -75,33 +84,12 @@ public class MainFrame extends JFrame implements IPanel {
     public void resetSignal() {
         signal = Signal.EMPITY;
     }
-
-    private class Action implements ActionListener {
-
+    
+    private class Action extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
             signal = Signal.LOGOUT;
         }
     }
-
-    private class Key implements KeyListener {
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                signal = Signal.LOGOUT;
-            }
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            keyTyped(e);
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            keyTyped(e);
-        }
-
-    }
+    
 }

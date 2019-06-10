@@ -8,7 +8,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JButton;
-import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -39,7 +39,7 @@ class Administrative extends JPanel implements IPanel {
         //botao cadastrar funcionario
         add(bt_new = new JButton("1 - Register New Employee"), gbc);
         bt_new.setName(Signal.NEW_EMPLOYEE.name());
-        inputM = bt_new.getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        inputM = bt_new.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputM.put(KeyStroke.getKeyStroke('1'), Signal.ACTION);
         bt_new.addActionListener(new Action());
         bt_new.setActionMap(actionM);
@@ -47,7 +47,7 @@ class Administrative extends JPanel implements IPanel {
         //botao remover funcionario
         add(bt_del = new JButton("2 - Remove one Employee"), gbc);
         bt_del.setName(Signal.DEL_EMPLOYEE.name());
-        inputM = bt_del.getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        inputM = bt_del.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputM.put(KeyStroke.getKeyStroke('2'), Signal.ACTION);
         bt_del.addActionListener(new Action());
         bt_del.setActionMap(actionM);
@@ -55,7 +55,7 @@ class Administrative extends JPanel implements IPanel {
         //botao alterar funcionario
         add(bt_change = new JButton("3 - Change Employee Occupation"), gbc);
         bt_change.setName(Signal.CHANGE_EMPLOYEE.name());
-        inputM = bt_change.getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        inputM = bt_change.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputM.put(KeyStroke.getKeyStroke('3'), Signal.ACTION);
         bt_change.addActionListener(new Action());
         bt_change.setActionMap(actionM);
@@ -63,7 +63,7 @@ class Administrative extends JPanel implements IPanel {
         //botao relatorios
         add(bt_report = new JButton("4 - Reports"), gbc);
         bt_report.setName(Signal.REPORTS.name());
-        inputM = bt_report.getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        inputM = bt_report.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputM.put(KeyStroke.getKeyStroke('4'), Signal.ACTION);
         bt_report.addActionListener(new Action());
         bt_report.setActionMap(actionM);
@@ -71,7 +71,7 @@ class Administrative extends JPanel implements IPanel {
         //botao listas
         add(bt_list = new JButton("5 - Lists"), gbc);
         bt_list.setName(Signal.LIST.name());
-        inputM = bt_list.getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        inputM = bt_list.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputM.put(KeyStroke.getKeyStroke('5'), Signal.ACTION);
         bt_list.addActionListener(new Action());
         bt_list.setActionMap(actionM);

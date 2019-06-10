@@ -87,7 +87,7 @@ public class MainControl {
         if (options[0] != -1) {
             try {
                 eControl.goToFloor(options[0]);
-                reportsRegister(ReportControl.Activity.GO_TO_FLOOR.toString());
+                reportsRegister(ReportControl.Activity.GO_TO_FLOOR);
 
                 if (options[0] == 0) {
                     screen.mLeavingFloor();
@@ -158,7 +158,7 @@ public class MainControl {
                                     options[0],
                                     eControl.convertGender(options[1]));
 
-                            reportsRegister(ReportControl.Activity.REGISTERED.toString());
+                            reportsRegister(ReportControl.Activity.REGISTERED);
                             screen.mStandBy();
                             home(eControl.getActualUserLevelNumber());
                         }
@@ -180,7 +180,7 @@ public class MainControl {
                     eControl.getEmployeeByCode(options[0]).getName());
 
             if (options[1] == 1) {
-                reportsRegister(ReportControl.Activity.REMOVED.toString());
+                reportsRegister(ReportControl.Activity.REMOVED);
                 eControl.removeEmployeeByCode(options[0]);
                 screen.mStandBy();
                 home(eControl.getActualUserLevelNumber());
@@ -203,7 +203,7 @@ public class MainControl {
             }
 
             if (options[1] != -1) {
-                reportsRegister(ReportControl.Activity.CHANGED.toString());
+                reportsRegister(ReportControl.Activity.CHANGED);
 
                 eControl.changeOccupation(
                         options[0],
@@ -329,11 +329,11 @@ public class MainControl {
     }
 
 //</editor-fold>
-    private void reportsRegister(String rep) {
+    private void reportsRegister(ReportControl.Activity rep) {
 
         switch (rep) {
 
-            case "floor":
+            case GO_TO_FLOOR :
 
                 rControl.addReport(eControl.getActualUserName(),
                         ReportControl.Activity.GO_TO_FLOOR,
@@ -344,7 +344,7 @@ public class MainControl {
 
                 break;
 
-            case "new":
+            case REGISTERED:
 
                 rControl.addReport(eControl.getActualUserName(),
                         ReportControl.Activity.REGISTERED,
@@ -355,7 +355,7 @@ public class MainControl {
 
                 break;
 
-            case "del":
+            case REMOVED:
 
                 rControl.addReport(eControl.getActualUserName(),
                         ReportControl.Activity.REMOVED,
@@ -366,7 +366,7 @@ public class MainControl {
 
                 break;
 
-            case "change":
+            case CHANGED:
 
                 rControl.addReport(eControl.getActualUserName(),
                         ReportControl.Activity.CHANGED,
