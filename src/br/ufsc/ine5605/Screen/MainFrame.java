@@ -47,8 +47,8 @@ public class MainFrame extends JFrame implements IPanel {
         menuBar.add(bt_logout, BorderLayout.LINE_END);
 
         setJMenuBar(menuBar);
-        setSize(400, 400);
-        setLocation(500, 200);
+        setSize(500, 450);
+        setLocation(450, 200);
         setVisible(true);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

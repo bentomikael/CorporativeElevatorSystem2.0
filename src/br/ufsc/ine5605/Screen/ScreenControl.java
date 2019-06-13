@@ -3,7 +3,6 @@ package br.ufsc.ine5605.Screen;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.swing.JOptionPane;
 
 public class ScreenControl {
@@ -16,8 +15,9 @@ public class ScreenControl {
     private Home pHome;
     private Floor pFloor;
     private Administrative pAdmnistrative;
+    private NewEmployee pNew;
     //variaveis auxiliares
-    private int aux; // variavel auxiliar
+    private int aux;
     private boolean logoutRequest;
 
     public ScreenControl() {
@@ -26,8 +26,14 @@ public class ScreenControl {
         pHome = new Home();
         pFloor = new Floor();
         pAdmnistrative = new Administrative();
+        pNew = new NewEmployee();
+
         cardName = new HashMap();
         addCardsToFrame();
+    }
+
+    public void testes() {
+        showScreen(pNew);
     }
 
     public boolean getLogoutRequest() {
@@ -40,10 +46,10 @@ public class ScreenControl {
         logoutRequest = false;
         //desativa menu bar
         mainF.logged(false, null);
-        
+
         boolean valid = false;
         showScreen(pLogin);
-        
+
         do {
             waitButton(pLogin);
             aux = codeFilter(pLogin.getCode());
@@ -62,16 +68,16 @@ public class ScreenControl {
     }
 
     public int home(String name, int actualUserLevel) {
-        
+
         //ativa o menu bar
         mainF.logged(true, name);
-        
+
         //oculta botão administrativo se não tiver autorizacão
         if (actualUserLevel < 3) {
             pHome.getComponent(1).setVisible(false);
         }
 
-        showScreen(pHome);       
+        showScreen(pHome);
         waitButton(pHome);
 
         if (!logoutRequest) {
@@ -155,6 +161,23 @@ public class ScreenControl {
         return aux;
     }
 
+    public ArrayList newEmployee(int actualUserLevel,ArrayList allCodes,ArrayList allNames ) {
+        ArrayList content = new ArrayList();
+        showScreen(pNew);
+        waitButton(pNew);
+        content = convertContentStrings(pNew.getContent());
+        
+        for(Object name:allNames)
+        if(content.get(0).equals(name))
+            mAlreadyRegistered();
+       
+        for(Object code:allCodes)
+            if(content.get(3).equals(code))
+                mAlreadyRegistered();
+        
+        return content;
+    }
+
     /**
      * Espera que seja apertado um botão da tela
      *
@@ -163,12 +186,13 @@ public class ScreenControl {
      */
     private void waitButton(IPanel pane) {
         do {
-            System.out.print("");      //precisa pra funcionar (??)
+//            System.out.print("");      //precisa pra funcionar (??)
             if (mainF.getSignal() == Signal.LOGOUT) {
                 logoutRequest = true;
                 aux = -1;
                 break;
             }
+   
         } while (pane.getSignal() == Signal.EMPITY);
         pane.resetSignal();
 
@@ -196,12 +220,35 @@ public class ScreenControl {
         return newInt;
     }
 
+    /**
+     *
+     * @param content array de strings para serem convertidas
+     * @return Arraylist contendo String ou int. Se não for um valor valido para
+     * ser usado, retorna "invalid".
+     */
+    private ArrayList convertContentStrings(String[] content) {
+        ArrayList array = new ArrayList();
+        for (String s : content) {
+            if (s.matches("[A-Z a-z cç]{" + s.length() + "}")) {
+                array.add(s);
+            } else {
+                try {
+                    array.add(Integer.valueOf(s));
+                } catch (NumberFormatException e) {
+                    array.add("invalid");
+                }
+            }
+        }
+        return array;
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Manipulacao de cards(telas)">
     private void addCardsToFrame() {
         cardName.put(pLogin, "LOGIN");
         cardName.put(pHome, "HOME");
         cardName.put(pFloor, "FLOOR");
         cardName.put(pAdmnistrative, "ADMNISTRATIVE");
+        cardName.put(pNew, "NEW");
 
         cards_mainF = (CardLayout) (mainF.getCards().getLayout());
 
@@ -209,6 +256,7 @@ public class ScreenControl {
         mainF.getCards().add(pHome, cardName.get(pHome));
         mainF.getCards().add(pFloor, cardName.get(pFloor));
         mainF.getCards().add(pAdmnistrative, cardName.get(pAdmnistrative));
+        mainF.getCards().add(pNew, cardName.get(pNew));
     }
 
     private void showScreen(IPanel panel) {

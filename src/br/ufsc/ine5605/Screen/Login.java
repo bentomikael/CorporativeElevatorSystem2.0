@@ -28,6 +28,7 @@ public class Login extends JPanel implements IPanel {
         InputMap inputM = new InputMap();
         ActionMap actionM = new ActionMap();
         actionM.put(Signal.ACTION, new Action()); 
+        
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         

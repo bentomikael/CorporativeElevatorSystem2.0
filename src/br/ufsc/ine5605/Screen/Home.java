@@ -14,10 +14,10 @@ import javax.swing.KeyStroke;
 
 public class Home extends JPanel implements IPanel {
 
-    private Signal signal;
-    private Signal option;
-    private JButton bt_floor;
-    private JButton bt_adm;
+    private Signal signal,
+                   option;
+    private JButton bt_floor,
+                    bt_adm;
 
     public Home() {
         signal = Signal.EMPITY;

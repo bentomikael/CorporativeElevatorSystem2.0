@@ -1,8 +1,7 @@
 package br.ufsc.ine5605.corporative_elavator_system2;
 
+import br.ufsc.ine5605.Screen.ScreenControl;
 import br.ufsc.ine5605.controller.MainControl;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -19,19 +18,15 @@ public class CorporativeElavatorSystem2 {
         try {
             UIManager.setLookAndFeel(       //altera a aparencia das janelas
                     "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(CorporativeElavatorSystem2.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            Logger.getLogger(CorporativeElavatorSystem2.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(CorporativeElavatorSystem2.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedLookAndFeelException ex) {
-            Logger.getLogger(CorporativeElavatorSystem2.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (Exception ex) {
+            System.out.println("erro de aplicar aparencia no frame");
+        } 
 //</editor-fold>
         
-        new MainControl().start();
-        
+       //new MainControl().start();
+        //testes individuais
+        ScreenControl s = new ScreenControl();
+        s.testes();
     /*
      * PIN
      * 999 CEO

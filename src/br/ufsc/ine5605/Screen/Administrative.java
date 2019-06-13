@@ -14,13 +14,13 @@ import javax.swing.KeyStroke;
 
 class Administrative extends JPanel implements IPanel {
 
-    private Signal signal;
-    private Signal option;
-    private JButton bt_new;
-    private JButton bt_del;
-    private JButton bt_change;
-    private JButton bt_report;
-    private JButton bt_list;
+    private Signal signal,
+                   option;
+    private JButton bt_new,
+                    bt_del,
+                    bt_change,
+                    bt_report,
+                    bt_list;
 
     public Administrative() {
         signal = Signal.EMPITY;

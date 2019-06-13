@@ -4,9 +4,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -17,14 +14,14 @@ import javax.swing.KeyStroke;
 
 public class Floor extends JPanel implements IPanel {
 
-    private Signal signal;
-    private Signal option;
-    private JButton bt_ground;
-    private JButton bt_first;
-    private JButton bt_second;
-    private JButton bt_third;
-    private JButton bt_fourth;
-    private JButton bt_fifth;
+    private Signal signal,
+                   option;
+    private JButton bt_ground,
+                    bt_first,
+                    bt_second,
+                    bt_third,
+                    bt_fourth,
+                    bt_fifth;
 
     public Floor() {
         signal = Signal.EMPITY;
