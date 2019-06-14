@@ -3,7 +3,6 @@ package br.ufsc.ine5605.corporative_elavator_system2;
 import br.ufsc.ine5605.Screen.ScreenControl;
 import br.ufsc.ine5605.controller.MainControl;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -12,7 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class CorporativeElavatorSystem2 {
 
     
-    public static void main(String[] args) throws UnsupportedLookAndFeelException {
+    public static void main(String[] args) {
        
         //<editor-fold defaultstate="collapsed" desc="Alterar aparencia das janelas">
         try {
@@ -23,11 +22,12 @@ public class CorporativeElavatorSystem2 {
         } 
 //</editor-fold>
         
-       //new MainControl().start();
+       new MainControl().start();
         //testes individuais
-        ScreenControl s = new ScreenControl();
-        s.testes();
+//        ScreenControl s = new ScreenControl();
+        
     /*
+     *          PRÉ REGISTRADOS
      * PIN
      * 999 CEO
      * 888 EXECUTIVE

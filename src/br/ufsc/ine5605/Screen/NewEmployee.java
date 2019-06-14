@@ -1,5 +1,6 @@
 package br.ufsc.ine5605.Screen;
 
+import br.ufsc.ine5605.entity.Employee;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -64,8 +65,8 @@ public class NewEmployee extends JPanel implements IPanel{
         gbc.gridy = 4;
         add(new JLabel("Gender :"),gbc);
         
-        rb_male.setActionCommand("Male");
-        rb_female.setActionCommand("Female");
+        rb_male.setActionCommand(Employee.Gender.MALE.toString());
+        rb_female.setActionCommand(Employee.Gender.FEMALE.toString());
         gender.add(rb_male);
         gender.add(rb_female);
         boxG.add(rb_male);
@@ -136,14 +137,28 @@ public class NewEmployee extends JPanel implements IPanel{
         
     }
 
-    public String[] getContent(){
-        String[] content = new String[]{ tf_name.getText(),
-            age.getSelectedItem().toString(),
-            gender.getSelection().getActionCommand(),
-            tf_code.getText(),
-            occupation.getSelection().getActionCommand()};
-       return content;
+    //<editor-fold defaultstate="collapsed" desc="Gets">
+    public String getTfName() {
+        return tf_name.getText();
     }
+
+    public String getTfCode() {
+        return tf_code.getText();
+    }
+
+    public String getGender() {
+        return gender.getSelection().getActionCommand();
+    }
+
+    public String getOccupation() {
+        return occupation.getSelection().getActionCommand();
+    }
+
+    public String getAge() {
+        return age.getSelectedItem().toString();
+    }
+//</editor-fold>
+
     
     @Override
     public Signal getSignal() {
@@ -155,10 +170,23 @@ public class NewEmployee extends JPanel implements IPanel{
         signal = Signal.EMPITY;
     }
     
+    
     private class Action extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
+            boolean valid = true;
+
+            if(!getTfName().matches(
+                    "[A-Z a-z cc]{"+getTfName().length()+"}")){
+                ScreenControl.mInvalidName();
+                valid = false;
+            }
+            if(!getTfCode().matches("[0-9]+")){
+                ScreenControl.mInvalidCode();
+                valid = false;
+            }
             
+            if(valid)
             signal = Signal.NEXT;
         }
 

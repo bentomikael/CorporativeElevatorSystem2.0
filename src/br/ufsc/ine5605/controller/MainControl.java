@@ -1,8 +1,11 @@
 package br.ufsc.ine5605.controller;
 
 import br.ufsc.ine5605.Screen.ScreenControl;
+import br.ufsc.ine5605.entity.Employee;
+import br.ufsc.ine5605.entity.People;
 import static java.lang.Thread.sleep;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainControl {
@@ -35,7 +38,8 @@ public class MainControl {
         return format.format(date);
     }
 
-//</editor-fold>     
+//</editor-fold>  
+    
     //<editor-fold defaultstate="collapsed" desc="Login">
     /**
      * Inicia nova classe que verifica logout Pega os dados da tela pelo
@@ -58,6 +62,7 @@ public class MainControl {
     }
 
 //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Controle de acoes por tela">
     /**
      * @param actualAccessLevel nivel do usuario atual(recebe valor de start())
@@ -128,45 +133,25 @@ public class MainControl {
     }
 
     private void newEmployee() {
+        ArrayList newE = new ArrayList();
+        newE = screen.newEmployee(
+                eControl.getActualUserLevelNumber(),
+                eControl.getCodes(eControl.getAllEmployees()));
 
-        String name = screen.addEmployeeName();
+        if (newE != null) {
 
-        if (!name.equals("00")) {
+            eControl.registerNewEmployee(
+                    Integer.parseInt(newE.get(3).toString()), 
+                    (People.Occupation) newE.get(4),
+                    newE.get(0).toString(),
+                    Integer.parseInt(newE.get(2).toString()),
+                    (People.Gender)newE.get(1));
 
-            options[0] = screen.addEmployeeAge();
-
-            if (options[0] != -1) {
-
-                options[1] = screen.addEmployeeGender();
-
-                if (options[1] != -1) {
-
-                    options[2] = screen.addEmployeeCode(
-                            eControl.getCodes(eControl.getAllEmployees()));
-
-                    if (options[2] != -1) {
-
-                        options[3] = screen.addEmployeeOccupation(
-                                eControl.getActualUserLevelNumber());
-
-                        if (options[3] != -1) {
-
-                            eControl.registerNewEmployee(
-                                    options[2],
-                                    eControl.convertOccupation(options[3]),
-                                    name,
-                                    options[0],
-                                    eControl.convertGender(options[1]));
-
-                            reportsRegister(ReportControl.Activity.REGISTERED);
-                            screen.mStandBy();
-                            home(eControl.getActualUserLevelNumber());
-                        }
-                    }
-                }
-            }
+            reportsRegister(ReportControl.Activity.REGISTERED);
+            screen.mSuccessFulRegistered(newE.get(0).toString());
+            home();
         }
-    }
+    }        
 
     private void delEmployee() {
 

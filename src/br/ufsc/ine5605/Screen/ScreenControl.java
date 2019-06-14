@@ -16,6 +16,7 @@ public class ScreenControl {
     private Floor pFloor;
     private Administrative pAdmnistrative;
     private NewEmployee pNew;
+    private DelEmployee pDel;
     //variaveis auxiliares
     private int aux;
     private boolean logoutRequest;
@@ -42,7 +43,6 @@ public class ScreenControl {
     }
 
     public int login(ArrayList allCodes) {
-        mainF.resetSignal();
         logoutRequest = false;
         //desativa menu bar
         mainF.logged(false, null);
@@ -52,7 +52,7 @@ public class ScreenControl {
 
         do {
             waitButton(pLogin);
-            aux = codeFilter(pLogin.getCode());
+            aux = Integer.parseInt(pLogin.getCode());
 
             if (aux != -1) {
                 if (!allCodes.contains(aux)) {
@@ -161,21 +161,32 @@ public class ScreenControl {
         return aux;
     }
 
-    public ArrayList newEmployee(int actualUserLevel,ArrayList allCodes,ArrayList allNames ) {
-        ArrayList content = new ArrayList();
-        showScreen(pNew);
-        waitButton(pNew);
-        content = convertContentStrings(pNew.getContent());
+    public ArrayList newEmployee(int actualUserLevel,ArrayList allCodes ) {
+        boolean valid = true;
+        ArrayList newE = new ArrayList();
         
-        for(Object name:allNames)
-        if(content.get(0).equals(name))
-            mAlreadyRegistered();
-       
-        for(Object code:allCodes)
-            if(content.get(3).equals(code))
+        do{ 
+            showScreen(pNew);
+            waitButton(pNew);
+            
+            if(allCodes.contains(pNew.getTfCode())){
                 mAlreadyRegistered();
+                valid = false;
+            }   
+            
+        }while(!valid && !logoutRequest );
         
-        return content;
+        if(logoutRequest)
+            newE = null;
+        else{
+            newE.add(pNew.getTfName());
+            newE.add(pNew.getAge());
+            newE.add(pNew.getGender());
+            newE.add(pNew.getTfCode());
+            newE.add(pNew.getOccupation());
+        }
+        
+        return newE;
     }
 
     /**
@@ -186,7 +197,7 @@ public class ScreenControl {
      */
     private void waitButton(IPanel pane) {
         do {
-//            System.out.print("");      //precisa pra funcionar (??)
+            System.out.print("");      //precisa pra funcionar (??)
             if (mainF.getSignal() == Signal.LOGOUT) {
                 logoutRequest = true;
                 aux = -1;
@@ -195,51 +206,8 @@ public class ScreenControl {
    
         } while (pane.getSignal() == Signal.EMPITY);
         pane.resetSignal();
+        mainF.resetSignal();
 
-    }
-
-    /**
-     *
-     * @param code recebe o codigo digitado no text field
-     * @return codigo como inteiro. Se retornar -1 é invalido
-     */
-    private int codeFilter(String code) {
-        int newInt = -1;
-
-        try {
-            newInt = Integer.valueOf(code); //converte para int
-
-            if (newInt <= 99 || newInt > 999) {
-                mInvalidCode();
-                newInt = -1;
-            }
-        } catch (NumberFormatException e) {
-            mInvalidNumber();
-        }
-
-        return newInt;
-    }
-
-    /**
-     *
-     * @param content array de strings para serem convertidas
-     * @return Arraylist contendo String ou int. Se não for um valor valido para
-     * ser usado, retorna "invalid".
-     */
-    private ArrayList convertContentStrings(String[] content) {
-        ArrayList array = new ArrayList();
-        for (String s : content) {
-            if (s.matches("[A-Z a-z cç]{" + s.length() + "}")) {
-                array.add(s);
-            } else {
-                try {
-                    array.add(Integer.valueOf(s));
-                } catch (NumberFormatException e) {
-                    array.add("invalid");
-                }
-            }
-        }
-        return array;
     }
 
     //<editor-fold defaultstate="collapsed" desc="Manipulacao de cards(telas)">
@@ -265,75 +233,82 @@ public class ScreenControl {
 //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Mensagens">
-    public void mInvalidNumber() {
-        JOptionPane.showMessageDialog(mainF,
+    public static void mInvalidNumber() {
+        JOptionPane.showMessageDialog(null,
                 "INVALID NUMBER! TRY AGAIN",
                 "INVALID NUMBER",
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void mInvalidCode() {
-        JOptionPane.showMessageDialog(mainF,
+    public static void mInvalidCode() {
+        JOptionPane.showMessageDialog(null,
                 "CODE CONTAINS 3 NUMBERS",
                 "INVALID CODE",
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void mInvalidName() {
-        JOptionPane.showMessageDialog(mainF,
+    public static void mInvalidName() {
+        JOptionPane.showMessageDialog(null,
                 "INVALID NAME! TRY AGAIN",
                 "INVALID NAME",
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void mDontHavePermision() {
-        JOptionPane.showMessageDialog(mainF,
+    public static void mDontHavePermision() {
+        JOptionPane.showMessageDialog(null,
                 "YOU DONT HAVE PERMISSION TO EXECUTE THIS OPERATION",
                 "ACCESS DANIED",
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void mAlreadyRegistered() {
-        JOptionPane.showMessageDialog(mainF,
-                "USER ALREADY REGISTERED",
+    public static void mAlreadyRegistered() {
+        JOptionPane.showMessageDialog(null,
+                "USER ALREADY REGISTERED WITH THIS CODE",
                 "ALREADY REGISTERED",
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void mNotFound() {
-        JOptionPane.showMessageDialog(mainF,
+    public static void mNotFound() {
+        JOptionPane.showMessageDialog(null,
                 "USER NOT FOUND!",
                 "NOT FOUND",
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void mChangeSelfError() {
-        JOptionPane.showMessageDialog(mainF,
+    public static void mChangeSelfError() {
+        JOptionPane.showMessageDialog(null,
                 "YOU CAN'T CHANGE YOURS OWN ACCESS LEVEL",
                 "ACCESS DANIED",
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    public void mWentInFloor(int floor) {
-        JOptionPane.showMessageDialog(mainF,
+    public static void mWentInFloor(int floor) {
+        JOptionPane.showMessageDialog(null,
                 "YOU WENT TO FLOOR " + floor,
                 "SUCCESSFULL",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void mLeavingFloor() {
-        JOptionPane.showMessageDialog(mainF,
+    public static void mLeavingFloor() {
+        JOptionPane.showMessageDialog(null,
                 "BYE BYE, SE YOU LATER",
                 "SUCCESSFULL",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void mAlreadyInFloor() {
-        JOptionPane.showMessageDialog(mainF,
+    public static void mAlreadyInFloor() {
+        JOptionPane.showMessageDialog(null,
                 "YOU ALREADY IN THIS FLOOR!",
                 "ERRO",
                 JOptionPane.ERROR_MESSAGE);
 
+    }
+    
+    public static void mSuccessFulRegistered(String name){
+        JOptionPane.showMessageDialog(null,
+                "EMPLOYEE "+name+" REGISTERED SUCCESSFUL",
+                "SUCCESS",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 //</editor-fold>

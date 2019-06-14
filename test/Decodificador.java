@@ -9,16 +9,16 @@ import sun.net.www.http.HttpClient;
 public class Decodificador {
     
     public static void main(String args[]) {
-        String codificar = "teste";
-        codificar.toLowerCase();
-        
+        String codificar = "t.este";
         String codificado = "";
-        String aux = "";
-       
+        String aux;
+        
+        codificar.toLowerCase();
         char[] array = codificar.toCharArray();
+        
         for (char letra : array) {
             aux = "" + letra;
-            if (aux.matches(("[a-z cç]{" + aux.length() + "}")))
+            if (aux.matches(("[a-z cç] {1}")))
                 codificado += (char)(aux.hashCode() + 3);
             else
                 codificado += aux;
@@ -26,6 +26,6 @@ public class Decodificador {
         System.out.println(codificado);
     }
     public void requicicao(){
-        HttpClient client = new HttpClient();
+//        HttpClient client = new HttpClient();
     }
 }

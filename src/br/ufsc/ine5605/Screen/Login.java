@@ -72,7 +72,16 @@ public class Login extends JPanel implements IPanel {
    private class Action extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
+            boolean valid = true;
+           
+            if(!getCode().matches("[0-9]+")){
+                ScreenControl.mInvalidCode();
+                valid = false;
+            }
+               
+            if(valid)
             signal = Signal.NEXT;
+            
             tf_code.setText("");
         }
     }

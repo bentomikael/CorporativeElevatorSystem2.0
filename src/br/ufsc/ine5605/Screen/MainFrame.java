@@ -71,7 +71,6 @@ public class MainFrame extends JFrame implements IPanel {
         } else {
             bt_logout.setVisible(false);
             lb_userName.setText(" ");
-            signal = Signal.EMPITY;
         }
     }
 
