@@ -7,15 +7,14 @@ public class EmployeeControl {
     private ArrayList<Employee> employees;
     private Employee actualUser; 
 
-
     public EmployeeControl() {
         employees = new ArrayList(); 
+        
         employees.add(new Employee(999,Employee.Occupation.CEO,"goku",23,Employee.Gender.MALE)); //TESTE, apagar depois
         employees.add(new Employee(888,Employee.Occupation.EXECUTIVE,"vegeta",22,Employee.Gender.MALE)); //TESTE, apagar depois
         employees.add(new Employee(777,Employee.Occupation.ADMINISTRATION,"joao amoedo",10,Employee.Gender.MALE)); //TESTE, apagar depois
         employees.add(new Employee(666,Employee.Occupation.MANAGER,"bolsonaro",40,Employee.Gender.MALE)); //TESTE, apagar depois
         employees.add(new Employee(555,Employee.Occupation.SIMPLE_EMPLOYEE,"dilma",30,Employee.Gender.FEMALE)); //TESTE, apagar depois
-
     }
     
     //<editor-fold defaultstate="collapsed" desc="Usuario Logado">
@@ -75,7 +74,7 @@ public class EmployeeControl {
     }
     
     //retorna funcionarios de determinado andar
-    public ArrayList getEmployeeByFloor(int floor){
+    public ArrayList getEmployeesByFloor(int floor){
         ArrayList<Employee> list = new ArrayList();
         for(Employee e: employees)
             if(e.getCurrentFloor() == floor)
@@ -102,6 +101,16 @@ public class EmployeeControl {
                 break;
             }
         return employee;                     
+    }
+    
+    public Employee getEmployeeByName(String name) {
+        Employee employee = null;
+        for(Employee e: employees)
+            if(e.getName()== name){
+                employee = e;
+                break;
+            }
+        return employee;
     }
     
     //imprime nomes e codigo do array de funcionarios
@@ -136,6 +145,14 @@ public class EmployeeControl {
         return codes;
     }
     
+    public ArrayList getNames(ArrayList<Employee> array){
+        ArrayList<String> names = new ArrayList();
+        for(Employee e : array)
+            names.add(e.getName());
+        return names;
+    }
+    
+    
 //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Manipulacão de usuarios">
@@ -151,7 +168,6 @@ public class EmployeeControl {
     //remove funcionario pelo codigo
     public void removeEmployeeByCode(int code){
         
-        System.out.println("User Removed:\n\n "+ getEmployeeByCode(code).getName());     
         employees.remove(getEmployeeByCode(code));
         
     }
@@ -206,5 +222,6 @@ public class EmployeeControl {
     }
 
 //</editor-fold>
+
     
 }

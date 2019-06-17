@@ -28,13 +28,15 @@ public class ScreenControl {
         pFloor = new Floor();
         pAdmnistrative = new Administrative();
         pNew = new NewEmployee();
+        pDel = new DelEmployee();
 
         cardName = new HashMap();
         addCardsToFrame();
     }
 
+    //depois apagar ---------------------------------------------------------
     public void testes() {
-        showScreen(pNew);
+        showScreen(pDel);
     }
 
     public boolean getLogoutRequest() {
@@ -42,6 +44,7 @@ public class ScreenControl {
         return logoutRequest;
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Telas">
     public int login(ArrayList allCodes) {
         logoutRequest = false;
         //desativa menu bar
@@ -68,7 +71,6 @@ public class ScreenControl {
     }
 
     public int home(String name, int actualUserLevel) {
-
         //ativa o menu bar
         mainF.logged(true, name);
 
@@ -91,8 +93,7 @@ public class ScreenControl {
         return aux;
     }
 
-    public int floor(int actualUserLevel) {
-
+    public int floor(int actualUserLevel) {        
         if (actualUserLevel < 2) {
             pFloor.getComponent(2).setVisible(false);
         }
@@ -135,7 +136,7 @@ public class ScreenControl {
         return aux;
     }
 
-    public int administrativeOptions() {
+    public int administrativeOptions() {        
         showScreen(pAdmnistrative);
         waitButton(pAdmnistrative);
 
@@ -161,7 +162,7 @@ public class ScreenControl {
         return aux;
     }
 
-    public ArrayList newEmployee(int actualUserLevel,ArrayList allCodes ) {
+    public ArrayList newEmployee(int actualUserLevel,ArrayList allCodes ) {        
         boolean valid = true;
         ArrayList newE = new ArrayList();
         
@@ -188,7 +189,21 @@ public class ScreenControl {
         
         return newE;
     }
-
+    
+    public String delEmployee(ArrayList<Object> allNames){
+        String name = null;
+        
+        showScreen(pDel);
+        pDel.setList(allNames.toArray());
+        waitButton(pDel);
+        
+        if(!logoutRequest)
+            name = pDel.getNameSelected();
+        
+        return name;
+    }
+//</editor-fold>
+    
     /**
      * Espera que seja apertado um botão da tela
      *
@@ -207,8 +222,8 @@ public class ScreenControl {
         } while (pane.getSignal() == Signal.EMPITY);
         pane.resetSignal();
         mainF.resetSignal();
-
     }
+    
 
     //<editor-fold defaultstate="collapsed" desc="Manipulacao de cards(telas)">
     private void addCardsToFrame() {
@@ -217,14 +232,16 @@ public class ScreenControl {
         cardName.put(pFloor, "FLOOR");
         cardName.put(pAdmnistrative, "ADMNISTRATIVE");
         cardName.put(pNew, "NEW");
+        cardName.put(pDel,"DEL");
 
         cards_mainF = (CardLayout) (mainF.getCards().getLayout());
-
+        
         mainF.getCards().add(pLogin, cardName.get(pLogin));
         mainF.getCards().add(pHome, cardName.get(pHome));
         mainF.getCards().add(pFloor, cardName.get(pFloor));
         mainF.getCards().add(pAdmnistrative, cardName.get(pAdmnistrative));
         mainF.getCards().add(pNew, cardName.get(pNew));
+        mainF.getCards().add(pDel, cardName.get(pDel));
     }
 
     private void showScreen(IPanel panel) {

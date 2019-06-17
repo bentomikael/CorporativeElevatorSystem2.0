@@ -82,7 +82,6 @@ public class Login extends JPanel implements IPanel {
             if(valid)
             signal = Signal.NEXT;
             
-            tf_code.setText("");
         }
     }
 }

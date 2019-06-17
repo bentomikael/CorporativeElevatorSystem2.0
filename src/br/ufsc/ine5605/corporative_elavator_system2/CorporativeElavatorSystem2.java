@@ -23,8 +23,9 @@ public class CorporativeElavatorSystem2 {
 //</editor-fold>
         
        new MainControl().start();
-        //testes individuais
+//        testes individuais
 //        ScreenControl s = new ScreenControl();
+//        s.testes();
         
     /*
      *          PRÉ REGISTRADOS

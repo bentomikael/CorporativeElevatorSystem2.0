@@ -2,13 +2,13 @@ package br.ufsc.ine5605.entity;
 
 public class Employee extends People {
     private final int code;
-    private static Occupation accessLevel;
+    private Occupation accessLevel;
     private int currentFloor;
     private static  Gender gender;    
 
     public Employee(int code, Occupation accessLevel, String name, int age, Gender gender) {
         this.code = code;
-        Employee.accessLevel = accessLevel;
+        this.accessLevel = accessLevel;
         this.name = name;
         this.age = age;
         Employee.gender = gender;

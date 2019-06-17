@@ -3,7 +3,7 @@ package br.ufsc.ine5605.entity;
 public abstract class People {
     public String name;
     public int age;
-    public enum Gender {
+    public static enum Gender {
         MALE(1),
         FEMALE(2);
         
@@ -16,7 +16,7 @@ public abstract class People {
             this.number = number;
         }
     }
-    public enum Occupation {
+    public static enum Occupation {
     
         SIMPLE_EMPLOYEE(1),
         MANAGER(2),
@@ -47,6 +47,5 @@ public abstract class People {
     public void setAge(int age){
         this.age = age;
     }
-    
-       
+          
 }

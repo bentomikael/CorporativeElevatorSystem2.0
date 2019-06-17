@@ -9,7 +9,7 @@ import sun.net.www.http.HttpClient;
 public class Decodificador {
     
     public static void main(String args[]) {
-        String codificar = "t.este";
+        String codificar = "rr surjudpplqj riihuv d …ri sdwfkhv. sdxo judkdp";
         String codificado = "";
         String aux;
         
@@ -19,7 +19,7 @@ public class Decodificador {
         for (char letra : array) {
             aux = "" + letra;
             if (aux.matches(("[a-z cç] {1}")))
-                codificado += (char)(aux.hashCode() + 3);
+                codificado += (char)(aux.hashCode() - 3);
             else
                 codificado += aux;
         }

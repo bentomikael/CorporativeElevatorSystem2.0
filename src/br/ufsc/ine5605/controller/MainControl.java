@@ -1,7 +1,6 @@
 package br.ufsc.ine5605.controller;
 
 import br.ufsc.ine5605.Screen.ScreenControl;
-import br.ufsc.ine5605.entity.Employee;
 import br.ufsc.ine5605.entity.People;
 import static java.lang.Thread.sleep;
 import java.text.SimpleDateFormat;
@@ -51,9 +50,8 @@ public class MainControl {
                 screen.login(
                         eControl.getCodes(
                                 eControl.getAllEmployees())));
-
+                
         home();
-
     }
 
     private void logout() {
@@ -154,23 +152,28 @@ public class MainControl {
     }        
 
     private void delEmployee() {
-
-        options[0] = screen.delEmployeeCode(
-                eControl.getCodes(eControl.getAllEmployees()));
-
-        if (options[0] != -1) {
-            options[1] = screen.delEmployeeConfirmation(
-                    eControl.getActualUserLevelNumber(),
-                    eControl.getEmployeeByCode(options[0]).getAccessLevelNumber(),
-                    eControl.getEmployeeByCode(options[0]).getName());
-
-            if (options[1] == 1) {
-                reportsRegister(ReportControl.Activity.REMOVED);
-                eControl.removeEmployeeByCode(options[0]);
-                screen.mStandBy();
-                home(eControl.getActualUserLevelNumber());
+        String name;
+        name = screen.delEmployee(eControl.getNames(
+                eControl.getAllEmployees()));
+        
+        if(name != null){
+            if(eControl.getActualUserLevelNumber() > 
+                    eControl.getEmployeeByName(name).getAccessLevelNumber()){
+                
+                //reportsRegister(ReportControl.Activity.REMOVED);
+                eControl.removeEmployeeByCode(
+                        eControl.getEmployeeByName(name).getCodeAccess());
+                
+         
+                home();
+            }else{
+                screen.mDontHavePermision();
+                delEmployee();
             }
+        
         }
+            
+        
     }
 
     private void changeAccess() {
@@ -314,6 +317,7 @@ public class MainControl {
     }
 
 //</editor-fold>
+    
     private void reportsRegister(ReportControl.Activity rep) {
 
         switch (rep) {
