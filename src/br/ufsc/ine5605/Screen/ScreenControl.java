@@ -17,6 +17,7 @@ public class ScreenControl {
     private Administrative pAdmnistrative;
     private NewEmployee pNew;
     private DelEmployee pDel;
+    private ChangeEmployee pChange;
     //variaveis auxiliares
     private int aux;
     private boolean logoutRequest;
@@ -29,6 +30,7 @@ public class ScreenControl {
         pAdmnistrative = new Administrative();
         pNew = new NewEmployee();
         pDel = new DelEmployee();
+        pChange = new ChangeEmployee();
 
         cardName = new HashMap();
         addCardsToFrame();
@@ -36,7 +38,7 @@ public class ScreenControl {
 
     //depois apagar ---------------------------------------------------------
     public void testes() {
-        showScreen(pDel);
+        showScreen(pChange);
     }
 
     public boolean getLogoutRequest() {
@@ -190,17 +192,33 @@ public class ScreenControl {
         return newE;
     }
     
-    public String delEmployee(ArrayList<Object> allNames){
+    public String delEmployee(ArrayList listNames){
         String name = null;
         
         showScreen(pDel);
-        pDel.setList(allNames.toArray());
+        pDel.setList(listNames.toArray());
         waitButton(pDel);
         
         if(!logoutRequest)
             name = pDel.getNameSelected();
         
         return name;
+    }
+    
+    public ArrayList changeEmployee(ArrayList listNames){
+        
+        ArrayList toChange = new ArrayList();        
+        
+        showScreen(pChange);
+        pChange.setList(listNames.toArray());
+        waitButton(pChange);
+        
+        if(!logoutRequest){
+            toChange.add(pChange.getNameSelected());
+            toChange.add(pChange.getNewOccupation());
+        }
+        return toChange;
+        
     }
 //</editor-fold>
     
@@ -233,6 +251,7 @@ public class ScreenControl {
         cardName.put(pAdmnistrative, "ADMNISTRATIVE");
         cardName.put(pNew, "NEW");
         cardName.put(pDel,"DEL");
+        cardName.put(pChange,"CHANGE");
 
         cards_mainF = (CardLayout) (mainF.getCards().getLayout());
         
@@ -242,6 +261,7 @@ public class ScreenControl {
         mainF.getCards().add(pAdmnistrative, cardName.get(pAdmnistrative));
         mainF.getCards().add(pNew, cardName.get(pNew));
         mainF.getCards().add(pDel, cardName.get(pDel));
+        mainF.getCards().add(pChange,cardName.get(pChange));
     }
 
     private void showScreen(IPanel panel) {
@@ -324,6 +344,20 @@ public class ScreenControl {
     public static void mSuccessFulRegistered(String name){
         JOptionPane.showMessageDialog(null,
                 "EMPLOYEE "+name+" REGISTERED SUCCESSFUL",
+                "SUCCESS",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+   
+    public static void mSuccessFulRemoved(String name){
+        JOptionPane.showMessageDialog(null,
+                "EMPLOYEE "+name+" REMOVED SUCCESSFUL",
+                "SUCCESS",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public static void mSuccessFulAltered(String name){
+        JOptionPane.showMessageDialog(null,
+                "EMPLOYEE "+name+" ALTERED SUCCESSFUL",
                 "SUCCESS",
                 JOptionPane.INFORMATION_MESSAGE);
     }

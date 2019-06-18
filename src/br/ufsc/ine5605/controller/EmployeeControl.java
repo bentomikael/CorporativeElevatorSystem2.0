@@ -112,27 +112,7 @@ public class EmployeeControl {
             }
         return employee;
     }
-    
-    //imprime nomes e codigo do array de funcionarios
-    public void printIt(ArrayList<Employee> array){
-        int i = 1;
-        if(array.isEmpty())
-            System.out.println("--------EMPTY LIST--------");
-        else{
-            System.out.printf("%s %15s %17s %16s \n", " _________________", " _______ "," _____________ "," _____________");
-            System.out.printf("%s %15s %15s %15s\n","|       Name      |","|  Code  |","| Actual Floor |","|   Occupation  |");
         
-            for(Employee e : array)
-                System.out.printf("%2d %-17s %9d  %13d %9s %s\n",
-                i++,
-                e.getName().toUpperCase(),
-                e.getCodeAccess(),
-                e.getCurrentFloor(),
-                "",
-                e.getOccupation());
-        }
-    }  
-    
     /**
      * Obtem codigo de todos funcionarios de um array
      * @param array entre com array de funcionarios

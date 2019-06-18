@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.controller;
 
 import br.ufsc.ine5605.Screen.ScreenControl;
+import br.ufsc.ine5605.entity.Employee;
 import br.ufsc.ine5605.entity.People;
 import static java.lang.Thread.sleep;
 import java.text.SimpleDateFormat;
@@ -12,7 +13,7 @@ public class MainControl {
     private EmployeeControl eControl;
     private ScreenControl screen;
     private ReportControl rControl;
-    private int[] options;  //usada para manipular as opcoes recebidas de tela
+    private int option;  //usada para manipular as opcoes recebidas de tela
     private Date date;
     private SimpleDateFormat format;
     private boolean logged; // usado para saber quando está logado
@@ -21,7 +22,6 @@ public class MainControl {
         eControl = new EmployeeControl();
         screen = new ScreenControl();
         rControl = new ReportControl();
-        options = new int[5];
     }
 
     //<editor-fold defaultstate="collapsed" desc="Manipulacão de tempo">
@@ -38,7 +38,6 @@ public class MainControl {
     }
 
 //</editor-fold>  
-    
     //<editor-fold defaultstate="collapsed" desc="Login">
     /**
      * Inicia nova classe que verifica logout Pega os dados da tela pelo
@@ -50,17 +49,15 @@ public class MainControl {
                 screen.login(
                         eControl.getCodes(
                                 eControl.getAllEmployees())));
-                
+
         home();
     }
 
     private void logout() {
         start();
-
     }
 
 //</editor-fold>
-    
     //<editor-fold defaultstate="collapsed" desc="Controle de acoes por tela">
     /**
      * @param actualAccessLevel nivel do usuario atual(recebe valor de start())
@@ -70,10 +67,10 @@ public class MainControl {
     private void home() {
         new LogoutCheck().start();
 
-        options[0] = screen.home(eControl.getActualUserName(),
+        option = screen.home(eControl.getActualUserName(),
                 eControl.getActualUserLevelNumber());
 
-        switch (options[0]) {
+        switch (option) {
             case 1:
                 floor();
                 break;
@@ -85,17 +82,17 @@ public class MainControl {
 
     private void floor() {
 
-        options[0] = screen.floor(eControl.getActualUserLevelNumber());
+        option = screen.floor(eControl.getActualUserLevelNumber());
 
-        if (options[0] != -1) {
+        if (option != -1) {
             try {
-                eControl.goToFloor(options[0]);
+                eControl.goToFloor(option);
                 reportsRegister(ReportControl.Activity.GO_TO_FLOOR);
 
-                if (options[0] == 0) {
+                if (option == 0) {
                     screen.mLeavingFloor();
                 } else {
-                    screen.mWentInFloor(options[0]);
+                    screen.mWentInFloor(option);
                 }
                 logout();
 
@@ -109,9 +106,9 @@ public class MainControl {
 
     private void administrativeOptions() {
 
-        options[0] = screen.administrativeOptions();
+        option = screen.administrativeOptions();
 
-        switch (options[0]) {
+        switch (option) {
             case 1:
                 newEmployee();
                 break;
@@ -139,66 +136,61 @@ public class MainControl {
         if (newE != null) {
 
             eControl.registerNewEmployee(
-                    Integer.parseInt(newE.get(3).toString()), 
+                    Integer.parseInt(newE.get(3).toString()),
                     (People.Occupation) newE.get(4),
                     newE.get(0).toString(),
                     Integer.parseInt(newE.get(2).toString()),
-                    (People.Gender)newE.get(1));
+                    (People.Gender) newE.get(1));
 
             reportsRegister(ReportControl.Activity.REGISTERED);
             screen.mSuccessFulRegistered(newE.get(0).toString());
             home();
         }
-    }        
+    }
 
     private void delEmployee() {
         String name;
         name = screen.delEmployee(eControl.getNames(
-                eControl.getAllEmployees()));
-        
-        if(name != null){
-            if(eControl.getActualUserLevelNumber() > 
-                    eControl.getEmployeeByName(name).getAccessLevelNumber()){
-                
+                eControl.getEmployeesByLevelAccess(
+                        eControl.getActualUserLevelNumber() - 1)));
+
+        if (name != null) {
+            if (eControl.getActualUserLevelNumber()
+                    > eControl.getEmployeeByName(name).getAccessLevelNumber()) {
+
                 //reportsRegister(ReportControl.Activity.REMOVED);
                 eControl.removeEmployeeByCode(
                         eControl.getEmployeeByName(name).getCodeAccess());
-                
-         
+                screen.mSuccessFulRemoved(name);
+
                 home();
-            }else{
-                screen.mDontHavePermision();
-                delEmployee();
             }
-        
         }
-            
-        
     }
 
     private void changeAccess() {
+        ArrayList toChange = new ArrayList();
 
-        options[0] = screen.changeEmployeeCode(
-                eControl.getActualUserCode(),
-                eControl.getCodes(eControl.getAllEmployees()));
+        toChange = screen.changeEmployee(
+                eControl.getNames(eControl.getAllEmployees()));
 
-        if (options[0] != -1) {
-            if (screen.checkAuthorization(
-                    eControl.getActualUserLevelNumber(),
-                    eControl.getEmployeeByCode(options[0]).getAccessLevelNumber())) {
-                options[1] = screen.changeEmployeeOccupation(
-                        eControl.getActualUserLevelNumber());
-            }
-
-            if (options[1] != -1) {
-                reportsRegister(ReportControl.Activity.CHANGED);
+        if (!toChange.isEmpty()) {
+            if (eControl.getEmployeeByName(toChange.get(0).toString()).getAccessLevelNumber()
+                    < eControl.getActualUserLevelNumber()
+                    && Integer.parseInt(toChange.get(1).toString())
+                    < eControl.getActualUserLevelNumber()) {
+//                reportsRegister(ReportControl.Activity.CHANGED);
 
                 eControl.changeOccupation(
-                        options[0],
-                        eControl.convertOccupation(options[1]));
+                        eControl.getEmployeeByName(
+                                toChange.get(0).toString()).getCodeAccess(),
+                        People.Occupation.ADMINISTRATION);
 
-                screen.mStandBy();
-                home(eControl.getActualUserLevelNumber());
+                screen.mSuccessFulAltered(toChange.get(0).toString());
+                home();
+            } else {
+                screen.mDontHavePermision();
+                logout();
             }
         }
     }
@@ -317,12 +309,11 @@ public class MainControl {
     }
 
 //</editor-fold>
-    
     private void reportsRegister(ReportControl.Activity rep) {
 
         switch (rep) {
 
-            case GO_TO_FLOOR :
+            case GO_TO_FLOOR:
 
                 rControl.addReport(eControl.getActualUserName(),
                         ReportControl.Activity.GO_TO_FLOOR,

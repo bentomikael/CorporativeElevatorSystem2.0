@@ -1,8 +1,8 @@
 package br.ufsc.ine5605.entity;
 
 public abstract class People {
-    public String name;
-    public int age;
+    protected String name;
+    protected int age;
     public static enum Gender {
         MALE(1),
         FEMALE(2);
