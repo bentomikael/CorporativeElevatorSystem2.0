@@ -3,6 +3,7 @@ package br.ufsc.ine5605.Screen;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 public class ScreenControl {
@@ -18,6 +19,8 @@ public class ScreenControl {
     private NewEmployee pNew;
     private DelEmployee pDel;
     private ChangeEmployee pChange;
+    private ReportOptions pReportOp;
+    private ListOptions pListOp;
     //variaveis auxiliares
     private int aux;
     private boolean logoutRequest;
@@ -31,6 +34,8 @@ public class ScreenControl {
         pNew = new NewEmployee();
         pDel = new DelEmployee();
         pChange = new ChangeEmployee();
+        pReportOp = new ReportOptions();
+        pListOp = new ListOptions();
 
         cardName = new HashMap();
         addCardsToFrame();
@@ -38,7 +43,7 @@ public class ScreenControl {
 
     //depois apagar ---------------------------------------------------------
     public void testes() {
-        showScreen(pChange);
+        showScreen(pReportOp);
     }
 
     public boolean getLogoutRequest() {
@@ -160,7 +165,9 @@ public class ScreenControl {
                     aux = 5;
                     break;
             }
-        }
+        }else
+            aux = -1;
+        
         return aux;
     }
 
@@ -220,6 +227,59 @@ public class ScreenControl {
         return toChange;
         
     }
+    
+    public int reportOptions(){
+        showScreen(pReportOp);
+        waitButton(pReportOp);
+        
+        if(!logoutRequest){
+            switch(pReportOp.getOption()){
+                case REPORT_FLOOR:
+                    aux = 1;
+                    break;
+                case REPORT_DAY:
+                    aux = 2;
+                    break;
+                case REPORT_REGISTERED:
+                    aux = 3;
+                    break;
+                case REPORT_REMOVED:
+                    aux = 4;
+                    break;
+                case REPORT_ALL:
+                    aux = 5;
+                    break;
+            }
+        }else
+            aux = -1;
+            
+        return aux;
+    }
+        
+    public int listOptions(){
+        showScreen(pListOp);
+        waitButton(pListOp);
+        
+        if(!logoutRequest){
+            switch(pListOp.getOption()){
+                case LIST_ALL:
+                    aux = 1;
+                    break;
+                case LIST_OCCUPATION:
+                    aux = 2;
+                    break;
+                case LIST_FLOOR:
+                    aux = 3;
+                    break;
+                case LIST_WORK:
+                    aux = 4;
+                    break;
+            }
+        }else
+            aux = -1;
+            
+        return aux;
+    }
 //</editor-fold>
     
     /**
@@ -252,6 +312,8 @@ public class ScreenControl {
         cardName.put(pNew, "NEW");
         cardName.put(pDel,"DEL");
         cardName.put(pChange,"CHANGE");
+        cardName.put(pReportOp,"REPORT_OPTIONS");
+        cardName.put(pListOp,"LIST_OPTIONS");
 
         cards_mainF = (CardLayout) (mainF.getCards().getLayout());
         
@@ -262,6 +324,8 @@ public class ScreenControl {
         mainF.getCards().add(pNew, cardName.get(pNew));
         mainF.getCards().add(pDel, cardName.get(pDel));
         mainF.getCards().add(pChange,cardName.get(pChange));
+        mainF.getCards().add(pReportOp,cardName.get(pReportOp));
+        mainF.getCards().add(pListOp,cardName.get(pListOp));
     }
 
     private void showScreen(IPanel panel) {
@@ -269,6 +333,74 @@ public class ScreenControl {
     }
 //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Dialogs">
+    public static String dOccupation(){
+        Object[] possibilities = {"Simple Employee",
+            "Manager",
+            "Admnistrative",
+            "Executive",
+            "CEO"};
+        
+        String x = null;
+        do {
+            x = (String)JOptionPane.showInputDialog(
+                    null,
+                    "Select the Occupation to get the Report",
+                    "Occupation Selection",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    possibilities,
+                    "Simple Employee"); 
+        } while (x == null);
+        
+         
+        return x;
+    }
+    
+    public static String dFloor(){
+        Object[] possibilities = {"1", "2", "3","4","5"};
+        
+        String x = null;
+        do {
+            x = (String)JOptionPane.showInputDialog(
+                    null,
+                    "Select the Floor to get the Report:",
+                    "Floor Selection",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    possibilities,
+                    "1");  
+        } while (x == null);
+        
+        
+        
+        return x;
+    }
+    public static String dDay(){
+        Object[] possibilities = new Object[30];
+        for (int i = 1; i < possibilities.length; i++) {
+            possibilities[i] = i;
+        }
+        
+        String x = null;
+        do {
+            
+                x = (String)JOptionPane.showInputDialog(
+                    null,
+                    "Select the Floor to get the Report:\n"
+                    + "(1-30)",
+                    "Floor Selection",
+                    JOptionPane.PLAIN_MESSAGE);      
+            if(!x.matches("[1-9]+"))
+                x="-1";
+            
+        } while (Integer.parseInt(x) < 0 || Integer.parseInt(x) > 30);
+        
+        return x;
+    }
+    
+//</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="Mensagens">
     public static void mInvalidNumber() {
         JOptionPane.showMessageDialog(null,

@@ -195,57 +195,36 @@ public class MainControl {
         }
     }
 
-    private void report() {
-        options[0] = screen.reportScreenOptions();
+    public void report() {
+        
+        option = screen.reportOptions();
 
-        switch (options[0]) {
+        switch (option) {
 
             case 1:
-                options[1] = screen.reportScreenFloor();
-                if (options[1] != -1) {
+                ScreenControl.dFloor();
+//                screen.table();
                     rControl.printIt(
                             rControl.getReportSpecific(ReportControl.Type.FLOOR,
                                     Integer.toString(options[1])));
-                }
                 break;
 
             case 2:
-                options[1] = screen.reportScreenCode(
-                        eControl.getCodes(
-                                eControl.getAllEmployees()));
-                if (options[1] != -1) {
+                ScreenControl.dDay();
                     rControl.printIt(
                             rControl.getReportSpecific(ReportControl.Type.NAME,
                                     eControl.getEmployeeByCode(options[1]).getName()));
-                }
                 break;
 
             case 3:
-                String dat;
-                options[1] = screen.reportScreenDay();
-
-                if (options[1] != -1) {
-
-                    options[2] = screen.reportScreenMonth();
-
-                    if (options[2] != -1) {
-                        if (options[2] < 10) {
-                            dat = Integer.toString(options[1])
-                                    + "/0"
-                                    + Integer.toString(options[2]);
-                        } else {
-                            dat = Integer.toString(options[1])
-                                    + "/"
-                                    + Integer.toString(options[2]);
-                        }
-
-                        rControl.printIt(
-                                rControl.getReportSpecific(ReportControl.Type.DATE, dat));
-                    }
-                }
+//                screen.table();
+                
+                
                 break;
 
             case 4:
+                //                screen.table();
+
                 options[1] = screen.reportScreenHour();
                 if (options[1] != -1) {
                     rControl.printIt(
@@ -255,56 +234,43 @@ public class MainControl {
                 break;
 
             case 5:
+                //                screen.table();
+
                 rControl.printIt(rControl.getReportSpecific(ReportControl.Type.ACTIVITY,
                         ReportControl.Activity.REGISTERED.toString()));
                 break;
 
-            case 6:
-                rControl.printIt(rControl.getReportSpecific(ReportControl.Type.ACTIVITY,
-                        ReportControl.Activity.REMOVED.toString()));
-                break;
-
-            case 7:
-                rControl.printIt(rControl.getAllReports());
-                break;
-
         }
-        if (options[0] != -1 && options[1] != -1) {
-            screen.mStandBy();
-            home(eControl.getActualUserLevelNumber());
+        if (option != -1 && option != -1) {
+            home();
         }
     }
 
     private void list() {
 
-        options[0] = screen.employeesList();
+        option = screen.listOptions();
 
-        switch (options[0]) {
+        switch (option) {
 
             case 1:
-                eControl.printIt(eControl.getAllEmployees());
+                //                screen.table();
                 break;
 
             case 2:
-                eControl.printIt(
-                        eControl.getEmployeesByLevelAccess(
-                                screen.employeeListOccupation()));
+                ScreenControl.dOccupation();
                 break;
 
             case 3:
-                eControl.printIt(
-                        eControl.getEmployeeByFloor(
-                                screen.employeeListFloor()));
+                ScreenControl.dFloor();
                 break;
 
             case 4:
-                eControl.printIt(eControl.getEmployeesInWork());
+                //                screen.table();
                 break;
 
         }
-        if (options[0] != -1) { // impede que continue apos deslogar
-            screen.mStandBy();
-            home(eControl.getActualUserLevelNumber());
+        if (option != -1) { // impede que continue apos deslogar
+            home();
         }
     }
 

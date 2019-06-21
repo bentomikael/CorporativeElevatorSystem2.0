@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 
 /**
  *
- * @author Mikael Bento e Vinicius Hilbert
+ * @author Mikael Bento
  */
 public class CorporativeElavatorSystem2 {
 
@@ -22,7 +22,8 @@ public class CorporativeElavatorSystem2 {
         } 
 //</editor-fold>
         
-       new MainControl().start();
+//       new MainControl().start();
+       new MainControl().report();
 //        testes individuais
 //        ScreenControl s = new ScreenControl();
 //        s.testes();

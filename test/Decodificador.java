@@ -1,7 +1,3 @@
-
-import sun.net.www.http.HttpClient;
-
-
 /**
  *
  * @author Mikael Bento
@@ -9,16 +5,15 @@ import sun.net.www.http.HttpClient;
 public class Decodificador {
     
     public static void main(String args[]) {
-        String codificar = "rr surjudpplqj riihuv d …ri sdwfkhv. sdxo judkdp";
+        String codificar = "d oljhlud udsrvd pduurp vdowrx vreuh r fdfkruur fdqvdgr";
         String codificado = "";
         String aux;
         
-        codificar.toLowerCase();
         char[] array = codificar.toCharArray();
         
         for (char letra : array) {
             aux = "" + letra;
-            if (aux.matches(("[a-z cç] {1}")))
+            if (aux.matches(("[a-z cç] {0}")))
                 codificado += (char)(aux.hashCode() - 3);
             else
                 codificado += aux;

@@ -24,8 +24,16 @@ public enum Signal {
         DEL_EMPLOYEE,
         CHANGE_EMPLOYEE,
         REPORTS,
-        LIST;
-        
-          
-    
+        LIST,
+    //relatorios
+        REPORT_FLOOR,
+        REPORT_DAY,
+        REPORT_REGISTERED,
+        REPORT_REMOVED,
+        REPORT_ALL,
+    //listas
+        LIST_ALL,
+        LIST_OCCUPATION,
+        LIST_FLOOR,
+        LIST_WORK;
 }
