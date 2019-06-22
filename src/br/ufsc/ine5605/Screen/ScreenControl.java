@@ -1,5 +1,6 @@
 package br.ufsc.ine5605.Screen;
 
+import br.ufsc.ine5605.entity.People;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class ScreenControl {
     private ChangeEmployee pChange;
     private ReportOptions pReportOp;
     private ListOptions pListOp;
+    private Table pTable;
     //variaveis auxiliares
     private int aux;
     private boolean logoutRequest;
@@ -36,14 +38,10 @@ public class ScreenControl {
         pChange = new ChangeEmployee();
         pReportOp = new ReportOptions();
         pListOp = new ListOptions();
+        pTable = new Table();
 
         cardName = new HashMap();
         addCardsToFrame();
-    }
-
-    //depois apagar ---------------------------------------------------------
-    public void testes() {
-        showScreen(pReportOp);
     }
 
     public boolean getLogoutRequest() {
@@ -280,6 +278,12 @@ public class ScreenControl {
             
         return aux;
     }
+    
+    public void table(Signal typeList,Object[][] volues){
+        pTable.setListConfig(pTable.setListType(typeList), volues);
+        showScreen(pTable);
+        waitButton(pTable);
+    }
 //</editor-fold>
     
     /**
@@ -314,6 +318,7 @@ public class ScreenControl {
         cardName.put(pChange,"CHANGE");
         cardName.put(pReportOp,"REPORT_OPTIONS");
         cardName.put(pListOp,"LIST_OPTIONS");
+        cardName.put(pTable,"TABLE");
 
         cards_mainF = (CardLayout) (mainF.getCards().getLayout());
         
@@ -326,6 +331,7 @@ public class ScreenControl {
         mainF.getCards().add(pChange,cardName.get(pChange));
         mainF.getCards().add(pReportOp,cardName.get(pReportOp));
         mainF.getCards().add(pListOp,cardName.get(pListOp));
+        mainF.getCards().add(pTable,cardName.get(pTable));
     }
 
     private void showScreen(IPanel panel) {
@@ -334,13 +340,21 @@ public class ScreenControl {
 //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Dialogs">
-    public static String dOccupation(){
-        Object[] possibilities = {"Simple Employee",
+    public static int dOccupation(){
+        HashMap<Object,Integer> hash = new HashMap();
+        final Object[] possibilities = {"Simple Employee",
             "Manager",
             "Admnistrative",
             "Executive",
             "CEO"};
+       
+        hash.put(possibilities[0],1);
+        hash.put(possibilities[1],2);
+        hash.put(possibilities[2],3);
+        hash.put(possibilities[3],4);
+        hash.put(possibilities[4],5);
         
+                
         String x = null;
         do {
             x = (String)JOptionPane.showInputDialog(
@@ -353,8 +367,7 @@ public class ScreenControl {
                     "Simple Employee"); 
         } while (x == null);
         
-         
-        return x;
+        return hash.get(x);
     }
     
     public static String dFloor(){
@@ -372,10 +385,9 @@ public class ScreenControl {
                     "1");  
         } while (x == null);
         
-        
-        
         return x;
     }
+    
     public static String dDay(){
         Object[] possibilities = new Object[30];
         for (int i = 1; i < possibilities.length; i++) {

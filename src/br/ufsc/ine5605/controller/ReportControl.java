@@ -25,6 +25,12 @@ public class ReportControl {
         return reports;
     }
 
+    /**
+     * 
+     * @param type informaçoes da açao
+     * @param activity açao realizada pelo usuario
+     * @return lista com relatorios referente aos parametros
+     */
     public ArrayList getReportSpecific(Type type, String activity) {
         ArrayList array = new ArrayList();
 
@@ -67,26 +73,19 @@ public class ReportControl {
         return array ;
     }
 
-    //apagar
-    public void printIt (ArrayList<Report> array){
+    public Object[][] getList (ArrayList<Report> array){
         
-        if(array.isEmpty())
-            System.out.println("--------NO REPORTS YET--------");
-        else{
-            System.out.printf("%s %15s %16s %14s %11s %11s\n",
-            " _________________", " _______ ","_________ "," ________"," ________"," _________");
-            System.out.printf("%s %15s %15s %15s %s %s\n",
-            "|       Name      |","|  Action  |","| Altered |","|   Date  |","|   Hour  |","|  Floor  |");
+        Object[][] list = new Object[array.size()][6];
         
-            for(Report r : array)
-                System.out.printf("%-24s %-15s %-10s %12s %11s %9s \n",
-                        r.getEmployeeName(),
-                        r.getActivity(),
-                        r.getThatName(),
-                        r.getDate(),
-                        r.getHour(),
-                        r.getFloor());
+        for (int i = 0; i < array.size(); i++) {
+            list[i][0] = array.get(i).getEmployeeName();
+            list[i][1] = array.get(i).getActivity();
+            list[i][2] = array.get(i).getThatName();
+            list[i][3] = array.get(i).getDate();
+            list[i][4] = array.get(i).getHour();
+            list[i][5] = array.get(i).getFloor();  
         }
-    
+        
+        return list;   
     }
 }

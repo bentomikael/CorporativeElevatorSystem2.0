@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.controller;
 
 import br.ufsc.ine5605.entity.Employee;
+import br.ufsc.ine5605.entity.Report;
 import java.util.ArrayList;
 
 public class EmployeeControl {
@@ -199,6 +200,21 @@ public class EmployeeControl {
                 break;  
         }
         return gender;
+    }
+    
+    public Object[][] getList (ArrayList<Employee> array){
+        
+        Object[][] list = new Object[array.size()][5];
+        
+        for (int i = 0; i < array.size(); i++) {
+            list[i][0] = array.get(i).getName().toUpperCase();
+            list[i][1] = array.get(i).getCodeAccess();
+            list[i][2] = array.get(i).getCurrentFloor();
+            list[i][3] = array.get(i).getOccupation();
+            list[i][4] = array.get(i).getCurrentFloor();  
+        }
+        
+        return list;   
     }
 
 //</editor-fold>

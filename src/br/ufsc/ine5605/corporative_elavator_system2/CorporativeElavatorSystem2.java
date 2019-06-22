@@ -1,6 +1,5 @@
 package br.ufsc.ine5605.corporative_elavator_system2;
 
-import br.ufsc.ine5605.Screen.ScreenControl;
 import br.ufsc.ine5605.controller.MainControl;
 import javax.swing.UIManager;
 
@@ -12,7 +11,8 @@ public class CorporativeElavatorSystem2 {
 
     
     public static void main(String[] args) {
-       
+       new MainControl().start();
+        
         //<editor-fold defaultstate="collapsed" desc="Alterar aparencia das janelas">
         try {
             UIManager.setLookAndFeel(       //altera a aparencia das janelas
@@ -21,12 +21,6 @@ public class CorporativeElavatorSystem2 {
             System.out.println("erro de aplicar aparencia no frame");
         } 
 //</editor-fold>
-        
-//       new MainControl().start();
-       new MainControl().report();
-//        testes individuais
-//        ScreenControl s = new ScreenControl();
-//        s.testes();
         
     /*
      *          PRÉ REGISTRADOS

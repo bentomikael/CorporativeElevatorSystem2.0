@@ -65,16 +65,6 @@ public class Home extends JPanel implements IPanel {
         signal = Signal.EMPITY;
     }
 
-//    private class Action implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            option = Signal.valueOf(
-//                    ((JButton) e.getSource()).getName());
-//            signal = Signal.NEXT;
-//        }
-//    }
-
     private class Action extends AbstractAction {
         @Override
         public void actionPerformed(ActionEvent e) {
