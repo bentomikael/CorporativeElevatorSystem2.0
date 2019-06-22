@@ -2,7 +2,6 @@ package br.ufsc.ine5605.controller;
 
 import br.ufsc.ine5605.Screen.ScreenControl;
 import br.ufsc.ine5605.Screen.Signal;
-import br.ufsc.ine5605.entity.Employee;
 import br.ufsc.ine5605.entity.People;
 import static java.lang.Thread.sleep;
 import java.text.SimpleDateFormat;
@@ -20,9 +19,9 @@ public class MainControl {
     private boolean logged; // usado para saber quando está logado
 
     public MainControl() {
-        eControl = new EmployeeControl();
-        screen = new ScreenControl();
-        rControl = new ReportControl();
+        eControl = EmployeeControl.getIstance();
+        screen = ScreenControl.getIstance();
+        rControl = ReportControl.getIstance();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Manipulacão de tempo">
@@ -39,7 +38,6 @@ public class MainControl {
     }
 
 //</editor-fold> 
-    
     //<editor-fold defaultstate="collapsed" desc="Login">
     /**
      * Inicia nova classe que verifica logout Pega os dados da tela pelo
@@ -60,7 +58,6 @@ public class MainControl {
     }
 
 //</editor-fold>
-    
     //<editor-fold defaultstate="collapsed" desc="Controle de acoes por tela">
     /**
      * @param actualAccessLevel nivel do usuario atual(recebe valor de start())
@@ -90,7 +87,7 @@ public class MainControl {
         if (option != -1) {
             try {
                 eControl.goToFloor(option);
-                reportsRegister(ReportControl.Activity.GO_TO_FLOOR,null);
+                reportsRegister(ReportControl.Activity.GO_TO_FLOOR, null);
 
                 if (option == 0) {
                     screen.mLeavingFloor();
@@ -145,7 +142,7 @@ public class MainControl {
                     Integer.parseInt(newE.get(2).toString()),
                     (People.Gender) newE.get(1));
 
-            reportsRegister(ReportControl.Activity.REGISTERED,newE.get(0));
+            reportsRegister(ReportControl.Activity.REGISTERED, newE.get(0));
             screen.mSuccessFulRegistered(newE.get(0).toString());
             home();
         }
@@ -161,7 +158,7 @@ public class MainControl {
             if (eControl.getActualUserLevelNumber()
                     > eControl.getEmployeeByName(name).getAccessLevelNumber()) {
 
-                reportsRegister(ReportControl.Activity.REMOVED,name);
+                reportsRegister(ReportControl.Activity.REMOVED, name);
                 eControl.removeEmployeeByCode(
                         eControl.getEmployeeByName(name).getCodeAccess());
                 screen.mSuccessFulRemoved(name);
@@ -182,8 +179,8 @@ public class MainControl {
                     < eControl.getActualUserLevelNumber()
                     && Integer.parseInt(toChange.get(1).toString())
                     < eControl.getActualUserLevelNumber()) {
-                
-                reportsRegister(ReportControl.Activity.CHANGED,toChange.get(0));
+
+                reportsRegister(ReportControl.Activity.CHANGED, toChange.get(0));
 
                 eControl.changeOccupation(
                         eControl.getEmployeeByName(
@@ -200,53 +197,54 @@ public class MainControl {
     }
 
     public void report() {
-        
+
         option = screen.reportOptions();
-        
-        if(option != -1)
-        switch (option) {
 
-            case 1:
-                String floor;
-                floor = ScreenControl.dFloor();
-                
-                screen.table(Signal.REPORTS,
-                    rControl.getList(
-                            rControl.getReportSpecific(ReportControl.Type.FLOOR,
-                                    floor) ) );
-                break;
+        if (option != -1) {
+            switch (option) {
 
-            case 2:
-                String date;
-                date = ScreenControl.dDay();
-                
+                case 1:
+                    String floor;
+                    floor = ScreenControl.dFloor();
+
                     screen.table(Signal.REPORTS,
-                    rControl.getList(
-                            rControl.getReportSpecific(ReportControl.Type.DATE,
-                                    date)) );
-                break;
+                            rControl.getList(
+                                    rControl.getReportSpecific(ReportControl.Type.FLOOR,
+                                            floor)));
+                    break;
 
-            case 3:
-                screen.table(Signal.REPORTS,
-                    rControl.getList(
-                            rControl.getReportSpecific(ReportControl.Type.ACTIVITY,
-                                    ReportControl.Activity.REGISTERED.toString())) );
-                
-                break;
+                case 2:
+                    String date;
+                    date = ScreenControl.dDay();
 
-            case 4:
                     screen.table(Signal.REPORTS,
-                    rControl.getList(
-                            rControl.getReportSpecific(ReportControl.Type.ACTIVITY,
-                                    ReportControl.Activity.REMOVED.toString())));
-                
-                break;
+                            rControl.getList(
+                                    rControl.getReportSpecific(ReportControl.Type.DATE,
+                                            date)));
+                    break;
 
-            case 5:
-                screen.table(Signal.REPORTS,
-                rControl.getList(rControl.getAllReports()) );
-                break;
+                case 3:
+                    screen.table(Signal.REPORTS,
+                            rControl.getList(
+                                    rControl.getReportSpecific(ReportControl.Type.ACTIVITY,
+                                            ReportControl.Activity.REGISTERED.toString())));
 
+                    break;
+
+                case 4:
+                    screen.table(Signal.REPORTS,
+                            rControl.getList(
+                                    rControl.getReportSpecific(ReportControl.Type.ACTIVITY,
+                                            ReportControl.Activity.REMOVED.toString())));
+
+                    break;
+
+                case 5:
+                    screen.table(Signal.REPORTS,
+                            rControl.getList(rControl.getAllReports()));
+                    break;
+
+            }
         }
         if (option != -1) {
             home();
@@ -280,7 +278,7 @@ public class MainControl {
 
             case 4:
                 screen.table(Signal.LIST, eControl.getList(
-                                        eControl.getEmployeesInWork()));
+                        eControl.getEmployeesInWork()));
                 break;
 
         }
@@ -290,8 +288,7 @@ public class MainControl {
     }
 
 //</editor-fold>
-    
-    private void reportsRegister(ReportControl.Activity rep,Object nameThat) {
+    private void reportsRegister(ReportControl.Activity rep, Object nameThat) {
 
         switch (rep) {
 

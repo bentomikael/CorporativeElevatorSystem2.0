@@ -3,14 +3,16 @@ package br.ufsc.ine5605.controller;
 import br.ufsc.ine5605.entity.Report;
 import java.util.ArrayList;
 
-public class ReportControl {
+public final class ReportControl {
 
+    private static final ReportControl INSTANCE = new ReportControl();
+    
+    
     private ArrayList<Report> reports;
-
     public enum Type { NAME, ACTIVITY, DATE, HOUR, FLOOR}
     public enum Activity{REGISTERED,REMOVED,CHANGED,GO_TO_FLOOR}
 
-    public ReportControl() {
+    private ReportControl() {
         reports = new ArrayList();
 
     }
@@ -87,5 +89,9 @@ public class ReportControl {
         }
         
         return list;   
+    }
+    
+    public static ReportControl getIstance(){
+        return INSTANCE;
     }
 }

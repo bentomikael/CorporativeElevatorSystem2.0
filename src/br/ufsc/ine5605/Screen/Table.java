@@ -3,31 +3,45 @@ package br.ufsc.ine5605.Screen;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 
 
 public class Table extends JPanel implements IPanel{
     private Signal signal;
     private JTable table;
     private JButton bt_ok;
+    private JScrollPane sp;
 
     public Table() {
+        signal = Signal.EMPITY;
+        InputMap inputM = new InputMap();
+        ActionMap actionM = new ActionMap();
+        actionM.put(Signal.ACTION, new Action());
+        
        setLayout(new BorderLayout());
        
+        bt_ok = new JButton("OK");
+        inputM = bt_ok.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputM.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), Signal.ACTION);    
+        bt_ok.addActionListener(new Action());
+        bt_ok.setActionMap(actionM);
+        add(bt_ok,BorderLayout.PAGE_END);
     }
     
     public void setListConfig(Object[] title,Object[][] values){
        table = new JTable(values, title);
-       JScrollPane sp = new JScrollPane(table);
+       sp = new JScrollPane(table);
        table.setEnabled(false);
-       add(sp);
-       
-       bt_ok = new JButton("OK");
-       bt_ok.addActionListener(new Action());
-       add(bt_ok,BorderLayout.PAGE_END);
+       add(sp); 
     }
         
     public Object[] setListType(Signal type){
@@ -49,10 +63,12 @@ public class Table extends JPanel implements IPanel{
     @Override
     public void resetSignal() {
         signal = Signal.EMPITY;
+        table.setVisible(false);
+        remove(sp);
     }
     
-    private class Action implements ActionListener {
-
+    private class Action extends AbstractAction {
+        @Override
         public void actionPerformed(ActionEvent e) {
             signal = Signal.NEXT;
         }

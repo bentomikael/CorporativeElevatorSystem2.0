@@ -1,13 +1,12 @@
 package br.ufsc.ine5605.Screen;
 
-import br.ufsc.ine5605.entity.People;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-public class ScreenControl {
+public final class ScreenControl {
+    private static final ScreenControl INSTANCE = new ScreenControl();
 
     private MainFrame mainF;
     private CardLayout cards_mainF;
@@ -27,7 +26,7 @@ public class ScreenControl {
     private int aux;
     private boolean logoutRequest;
 
-    public ScreenControl() {
+    private ScreenControl() {
         mainF = new MainFrame();
         pLogin = new Login();
         pHome = new Home();
@@ -98,7 +97,7 @@ public class ScreenControl {
         return aux;
     }
 
-    public int floor(int actualUserLevel) {        
+    public int floor(int actualUserLevel) {
         if (actualUserLevel < 2) {
             pFloor.getComponent(2).setVisible(false);
         }
@@ -141,7 +140,7 @@ public class ScreenControl {
         return aux;
     }
 
-    public int administrativeOptions() {        
+    public int administrativeOptions() {
         showScreen(pAdmnistrative);
         waitButton(pAdmnistrative);
 
@@ -163,75 +162,77 @@ public class ScreenControl {
                     aux = 5;
                     break;
             }
-        }else
+        } else {
             aux = -1;
-        
+        }
+
         return aux;
     }
 
-    public ArrayList newEmployee(int actualUserLevel,ArrayList allCodes ) {        
+    public ArrayList newEmployee(int actualUserLevel, ArrayList allCodes) {
         boolean valid = true;
         ArrayList newE = new ArrayList();
-        
-        do{ 
+
+        do {
             showScreen(pNew);
             waitButton(pNew);
-            
-            if(allCodes.contains(pNew.getTfCode())){
+
+            if (allCodes.contains(pNew.getTfCode())) {
                 mAlreadyRegistered();
                 valid = false;
-            }   
-            
-        }while(!valid && !logoutRequest );
-        
-        if(logoutRequest)
+            }
+
+        } while (!valid && !logoutRequest);
+
+        if (logoutRequest) {
             newE = null;
-        else{
+        } else {
             newE.add(pNew.getTfName());
             newE.add(pNew.getAge());
             newE.add(pNew.getGender());
             newE.add(pNew.getTfCode());
             newE.add(pNew.getOccupation());
         }
-        
+
         return newE;
     }
-    
-    public String delEmployee(ArrayList listNames){
+
+    public String delEmployee(ArrayList listNames) {
         String name = null;
-        
+
         showScreen(pDel);
         pDel.setList(listNames.toArray());
         waitButton(pDel);
-        
-        if(!logoutRequest)
+
+        if (!logoutRequest) {
             name = pDel.getNameSelected();
-        
+        }
+
         return name;
     }
-    
-    public ArrayList changeEmployee(ArrayList listNames){
-        
-        ArrayList toChange = new ArrayList();        
-        
+
+    public ArrayList changeEmployee(ArrayList listNames) {
+
+        ArrayList toChange = new ArrayList();
+
         showScreen(pChange);
         pChange.setList(listNames.toArray());
         waitButton(pChange);
-        
-        if(!logoutRequest){
+
+        if (!logoutRequest) {
             toChange.add(pChange.getNameSelected());
             toChange.add(pChange.getNewOccupation());
         }
         return toChange;
-        
+
     }
-    
-    public int reportOptions(){
+
+    public int reportOptions() {
         showScreen(pReportOp);
         waitButton(pReportOp);
-        
-        if(!logoutRequest){
-            switch(pReportOp.getOption()){
+
+        if (!logoutRequest) {
+            switch (pReportOp.getOption()) {
                 case REPORT_FLOOR:
                     aux = 1;
                     break;
@@ -248,18 +249,19 @@ public class ScreenControl {
                     aux = 5;
                     break;
             }
-        }else
+        } else {
             aux = -1;
-            
+        }
+
         return aux;
     }
-        
-    public int listOptions(){
+
+    public int listOptions() {
         showScreen(pListOp);
         waitButton(pListOp);
-        
-        if(!logoutRequest){
-            switch(pListOp.getOption()){
+
+        if (!logoutRequest) {
+            switch (pListOp.getOption()) {
                 case LIST_ALL:
                     aux = 1;
                     break;
@@ -273,19 +275,20 @@ public class ScreenControl {
                     aux = 4;
                     break;
             }
-        }else
+        } else {
             aux = -1;
-            
+        }
+
         return aux;
     }
-    
-    public void table(Signal typeList,Object[][] volues){
+
+    public void table(Signal typeList, Object[][] volues) {
         pTable.setListConfig(pTable.setListType(typeList), volues);
         showScreen(pTable);
         waitButton(pTable);
     }
 //</editor-fold>
-    
+
     /**
      * Espera que seja apertado um botão da tela
      *
@@ -300,12 +303,11 @@ public class ScreenControl {
                 aux = -1;
                 break;
             }
-   
+
         } while (pane.getSignal() == Signal.EMPITY);
         pane.resetSignal();
         mainF.resetSignal();
     }
-    
 
     //<editor-fold defaultstate="collapsed" desc="Manipulacao de cards(telas)">
     private void addCardsToFrame() {
@@ -314,24 +316,24 @@ public class ScreenControl {
         cardName.put(pFloor, "FLOOR");
         cardName.put(pAdmnistrative, "ADMNISTRATIVE");
         cardName.put(pNew, "NEW");
-        cardName.put(pDel,"DEL");
-        cardName.put(pChange,"CHANGE");
-        cardName.put(pReportOp,"REPORT_OPTIONS");
-        cardName.put(pListOp,"LIST_OPTIONS");
-        cardName.put(pTable,"TABLE");
+        cardName.put(pDel, "DEL");
+        cardName.put(pChange, "CHANGE");
+        cardName.put(pReportOp, "REPORT_OPTIONS");
+        cardName.put(pListOp, "LIST_OPTIONS");
+        cardName.put(pTable, "TABLE");
 
         cards_mainF = (CardLayout) (mainF.getCards().getLayout());
-        
+
         mainF.getCards().add(pLogin, cardName.get(pLogin));
         mainF.getCards().add(pHome, cardName.get(pHome));
         mainF.getCards().add(pFloor, cardName.get(pFloor));
         mainF.getCards().add(pAdmnistrative, cardName.get(pAdmnistrative));
         mainF.getCards().add(pNew, cardName.get(pNew));
         mainF.getCards().add(pDel, cardName.get(pDel));
-        mainF.getCards().add(pChange,cardName.get(pChange));
-        mainF.getCards().add(pReportOp,cardName.get(pReportOp));
-        mainF.getCards().add(pListOp,cardName.get(pListOp));
-        mainF.getCards().add(pTable,cardName.get(pTable));
+        mainF.getCards().add(pChange, cardName.get(pChange));
+        mainF.getCards().add(pReportOp, cardName.get(pReportOp));
+        mainF.getCards().add(pListOp, cardName.get(pListOp));
+        mainF.getCards().add(pTable, cardName.get(pTable));
     }
 
     private void showScreen(IPanel panel) {
@@ -340,79 +342,78 @@ public class ScreenControl {
 //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Dialogs">
-    public static int dOccupation(){
-        HashMap<Object,Integer> hash = new HashMap();
+    public static int dOccupation() {
+        HashMap<Object, Integer> hash = new HashMap();
         final Object[] possibilities = {"Simple Employee",
             "Manager",
             "Admnistrative",
             "Executive",
             "CEO"};
-       
-        hash.put(possibilities[0],1);
-        hash.put(possibilities[1],2);
-        hash.put(possibilities[2],3);
-        hash.put(possibilities[3],4);
-        hash.put(possibilities[4],5);
-        
-                
+
+        hash.put(possibilities[0], 1);
+        hash.put(possibilities[1], 2);
+        hash.put(possibilities[2], 3);
+        hash.put(possibilities[3], 4);
+        hash.put(possibilities[4], 5);
+
         String x = null;
         do {
-            x = (String)JOptionPane.showInputDialog(
+            x = (String) JOptionPane.showInputDialog(
                     null,
                     "Select the Occupation to get the Report",
                     "Occupation Selection",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     possibilities,
-                    "Simple Employee"); 
+                    "Simple Employee");
         } while (x == null);
-        
+
         return hash.get(x);
     }
-    
-    public static String dFloor(){
-        Object[] possibilities = {"1", "2", "3","4","5"};
-        
+
+    public static String dFloor() {
+        Object[] possibilities = {"1", "2", "3", "4", "5"};
+
         String x = null;
         do {
-            x = (String)JOptionPane.showInputDialog(
+            x = (String) JOptionPane.showInputDialog(
                     null,
                     "Select the Floor to get the Report:",
                     "Floor Selection",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     possibilities,
-                    "1");  
+                    "1");
         } while (x == null);
-        
+
         return x;
     }
-    
-    public static String dDay(){
+
+    public static String dDay() {
         Object[] possibilities = new Object[30];
         for (int i = 1; i < possibilities.length; i++) {
             possibilities[i] = i;
         }
-        
+
         String x = null;
         do {
-            
-                x = (String)JOptionPane.showInputDialog(
+
+            x = (String) JOptionPane.showInputDialog(
                     null,
                     "Select the Floor to get the Report:\n"
                     + "(1-30)",
                     "Floor Selection",
-                    JOptionPane.PLAIN_MESSAGE);      
-            if(!x.matches("[1-9]+"))
-                x="-1";
-            
+                    JOptionPane.PLAIN_MESSAGE);
+            if (!x.matches("[1-9]+")) {
+                x = "-1";
+            }
+
         } while (Integer.parseInt(x) < 0 || Integer.parseInt(x) > 30);
-        
+
         return x;
     }
-    
+
 //</editor-fold>
-    
     //<editor-fold defaultstate="collapsed" desc="Mensagens">
     public static void mInvalidNumber() {
         JOptionPane.showMessageDialog(null,
@@ -484,27 +485,31 @@ public class ScreenControl {
                 JOptionPane.ERROR_MESSAGE);
 
     }
-    
-    public static void mSuccessFulRegistered(String name){
+
+    public static void mSuccessFulRegistered(String name) {
         JOptionPane.showMessageDialog(null,
-                "EMPLOYEE "+name+" REGISTERED SUCCESSFUL",
+                "EMPLOYEE " + name + " REGISTERED SUCCESSFUL",
                 "SUCCESS",
                 JOptionPane.INFORMATION_MESSAGE);
     }
-   
-    public static void mSuccessFulRemoved(String name){
+
+    public static void mSuccessFulRemoved(String name) {
         JOptionPane.showMessageDialog(null,
-                "EMPLOYEE "+name+" REMOVED SUCCESSFUL",
+                "EMPLOYEE " + name + " REMOVED SUCCESSFUL",
                 "SUCCESS",
                 JOptionPane.INFORMATION_MESSAGE);
     }
-    
-    public static void mSuccessFulAltered(String name){
+
+    public static void mSuccessFulAltered(String name) {
         JOptionPane.showMessageDialog(null,
-                "EMPLOYEE "+name+" ALTERED SUCCESSFUL",
+                "EMPLOYEE " + name + " ALTERED SUCCESSFUL",
                 "SUCCESS",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
 //</editor-fold>
+    
+    public static ScreenControl getIstance(){
+        return INSTANCE;
+    }
 }
