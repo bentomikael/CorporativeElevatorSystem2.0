@@ -1,27 +1,34 @@
 package br.ufsc.ine5605.controller;
 
-import br.ufsc.ine5605.Screen.ScreenControl;
+import br.ufsc.ine5605.Screen.ScreenView;
 import br.ufsc.ine5605.Screen.Signal;
+import br.ufsc.ine5605.corporative_elavator_system2.StoreData;
 import br.ufsc.ine5605.entity.People;
+import java.io.FileNotFoundException;
 import static java.lang.Thread.sleep;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainControl {
+public final class MainControl {
+    private static final MainControl INSTANCE = new MainControl();
 
-    private EmployeeControl eControl;
-    private ScreenControl screen;
-    private ReportControl rControl;
+    private static EmployeeControl eControl;
+    private ScreenView screen;
+    private static ReportControl rControl;
     private int option;  //usada para manipular as opcoes recebidas de tela
     private Date date;
     private SimpleDateFormat format;
     private boolean logged; // usado para saber quando está logado
 
-    public MainControl() {
+    public static MainControl getInstance(){
+        return INSTANCE;
+    }
+    private MainControl() {
         eControl = EmployeeControl.getIstance();
-        screen = ScreenControl.getIstance();
+        screen = ScreenView.getIstance();
         rControl = ReportControl.getIstance();
+//        start();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Manipulacão de tempo">
@@ -39,12 +46,7 @@ public class MainControl {
 
 //</editor-fold> 
     //<editor-fold defaultstate="collapsed" desc="Login">
-    /**
-     * Inicia nova classe que verifica logout Pega os dados da tela pelo
-     * controlador de tela. Atribui o usuario atual e usa o nivel de acesso para
-     * iniciar home.
-     */
-    public void start() {
+    private void start() {
         eControl.login(
                 screen.login(
                         eControl.getCodes(
@@ -205,7 +207,7 @@ public class MainControl {
 
                 case 1:
                     String floor;
-                    floor = ScreenControl.dFloor();
+                    floor = ScreenView.dFloor();
 
                     screen.table(Signal.REPORTS,
                             rControl.getList(
@@ -215,7 +217,7 @@ public class MainControl {
 
                 case 2:
                     String date;
-                    date = ScreenControl.dDay();
+                    date = ScreenView.dDay();
 
                     screen.table(Signal.REPORTS,
                             rControl.getList(
@@ -264,14 +266,14 @@ public class MainControl {
 
             case 2:
                 int ocp;
-                ocp = ScreenControl.dOccupation();
+                ocp = ScreenView.dOccupation();
                 screen.table(Signal.LIST, eControl.getList(
                         eControl.getEmployeesByLevelAccess(ocp)));
                 break;
 
             case 3:
                 String floor;
-                floor = ScreenControl.dFloor();
+                floor = ScreenView.dFloor();
                 screen.table(Signal.LIST, eControl.getList(
                         eControl.getEmployeesByFloor(Integer.parseInt(floor))));
                 break;
@@ -371,4 +373,28 @@ public class MainControl {
         }
 
     }
+    
+    //<editor-fold defaultstate="collapsed" desc="Persistencia">
+    public static ArrayList getEmployees(){
+        return eControl.getAllEmployees();
+    }
+    public static ArrayList getReports(){
+        return rControl.getAllReports();
+    }
+    public void exportEmployees() throws FileNotFoundException{
+
+        StoreData.exportEmployees();
+    }
+    public void inportEmployees() throws FileNotFoundException, ClassNotFoundException{
+        StoreData.importEmployees();
+    }
+    public void exportReports() throws FileNotFoundException{
+        StoreData.exportReports();
+    }
+    public void inportReports() throws FileNotFoundException, ClassNotFoundException{
+        StoreData.importReports();
+    }
+//</editor-fold>
+    
+    
 }

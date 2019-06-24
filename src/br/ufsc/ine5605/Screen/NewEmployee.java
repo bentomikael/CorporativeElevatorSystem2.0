@@ -178,11 +178,11 @@ public class NewEmployee extends JPanel implements IPanel{
 
             if(!getTfName().matches(
                     "[A-Z a-z cc]{"+getTfName().length()+"}")){
-                ScreenControl.mInvalidName();
+                ScreenView.mInvalidName();
                 valid = false;
             }
             if(!getTfCode().matches("[0-9]+")){
-                ScreenControl.mInvalidCode();
+                ScreenView.mInvalidCode();
                 valid = false;
             }
             

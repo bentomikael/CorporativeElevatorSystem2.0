@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 
-public final class ScreenControl {
-    private static final ScreenControl INSTANCE = new ScreenControl();
+public final class ScreenView {
+    private static final ScreenView INSTANCE = new ScreenView();
 
     private MainFrame mainF;
     private CardLayout cards_mainF;
@@ -25,8 +25,11 @@ public final class ScreenControl {
     //variaveis auxiliares
     private int aux;
     private boolean logoutRequest;
-
-    private ScreenControl() {
+    
+    public static ScreenView getIstance(){
+            return INSTANCE;
+        }
+    private ScreenView() {
         mainF = new MainFrame();
         pLogin = new Login();
         pHome = new Home();
@@ -509,7 +512,5 @@ public final class ScreenControl {
 
 //</editor-fold>
     
-    public static ScreenControl getIstance(){
-        return INSTANCE;
-    }
+    
 }

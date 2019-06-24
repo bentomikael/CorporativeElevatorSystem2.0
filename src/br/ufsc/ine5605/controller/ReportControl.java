@@ -11,7 +11,10 @@ public final class ReportControl {
     private ArrayList<Report> reports;
     public enum Type { NAME, ACTIVITY, DATE, HOUR, FLOOR}
     public enum Activity{REGISTERED,REMOVED,CHANGED,GO_TO_FLOOR}
-
+    
+    public static ReportControl getIstance(){
+            return INSTANCE;
+        }
     private ReportControl() {
         reports = new ArrayList();
 
@@ -91,7 +94,5 @@ public final class ReportControl {
         return list;   
     }
     
-    public static ReportControl getIstance(){
-        return INSTANCE;
-    }
+    
 }

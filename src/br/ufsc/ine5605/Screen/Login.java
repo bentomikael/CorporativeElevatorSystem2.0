@@ -75,7 +75,7 @@ public class Login extends JPanel implements IPanel {
             boolean valid = true;
            
             if(!getCode().matches("[0-9]+")){
-                ScreenControl.mInvalidCode();
+                ScreenView.mInvalidCode();
                 valid = false;
             }
                

@@ -8,7 +8,10 @@ public final class EmployeeControl {
 
     private ArrayList<Employee> employees;
     private Employee actualUser;
-
+    
+    public static EmployeeControl getIstance(){
+            return INSTANCE;
+        }
     private EmployeeControl() {
         employees = new ArrayList();
 
@@ -184,7 +187,5 @@ public final class EmployeeControl {
         return list;
     }
 
-    public static EmployeeControl getIstance(){
-        return INSTANCE;
-    }
+    
 }
