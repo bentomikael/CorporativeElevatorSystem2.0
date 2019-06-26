@@ -1,6 +1,7 @@
 package br.ufsc.ine5605.Screen;
 
 import br.ufsc.ine5605.entity.Employee;
+import br.ufsc.ine5605.entity.People;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -56,8 +57,8 @@ public class NewEmployee extends JPanel implements IPanel{
         add(age,gbc);
         
         //box genero 
-        JRadioButton rb_male = new JRadioButton("Male",true);
-        JRadioButton rb_female = new JRadioButton("Female");
+        JRadioButton rb_male = new JRadioButton(People.Gender.MALE.toString(),true);
+        JRadioButton rb_female = new JRadioButton(People.Gender.FEMALE.toString());
         gender = new ButtonGroup();
         Box boxG = Box.createVerticalBox();
       
@@ -65,8 +66,8 @@ public class NewEmployee extends JPanel implements IPanel{
         gbc.gridy = 4;
         add(new JLabel("Gender :"),gbc);
         
-        rb_male.setActionCommand(Employee.Gender.MALE.toString());
-        rb_female.setActionCommand(Employee.Gender.FEMALE.toString());
+        rb_male.setActionCommand(People.Gender.MALE.toString());
+        rb_female.setActionCommand(People.Gender.FEMALE.toString());
         gender.add(rb_male);
         gender.add(rb_female);
         boxG.add(rb_male);
@@ -97,11 +98,11 @@ public class NewEmployee extends JPanel implements IPanel{
         gbc.gridy = 6;
         add(new JLabel("Occupation:"),gbc);        
         
-        rb_simple.setActionCommand("1");
-        rb_manager.setActionCommand("2");
-        rb_administrative.setActionCommand("3");
-        rb_executive.setActionCommand("4");
-        rb_ceo.setActionCommand("5");
+        rb_simple.setActionCommand(Employee.Occupation.SIMPLE_EMPLOYEE.toString());
+        rb_manager.setActionCommand(Employee.Occupation.MANAGER.toString());
+        rb_administrative.setActionCommand(Employee.Occupation.ADMINISTRATION.toString());
+        rb_executive.setActionCommand(Employee.Occupation.EXECUTIVE.toString());
+        rb_ceo.setActionCommand(Employee.Occupation.CEO.toString());
         
         occupation.add(rb_simple);
         occupation.add(rb_manager);

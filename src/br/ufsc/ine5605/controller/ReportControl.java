@@ -1,13 +1,13 @@
 package br.ufsc.ine5605.controller;
 
+import br.ufsc.ine5605.corporative_elavator_system2.StoreData;
 import br.ufsc.ine5605.entity.Report;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public final class ReportControl {
-
     private static final ReportControl INSTANCE = new ReportControl();
-    
-    
+   
     private ArrayList<Report> reports;
     public enum Type { NAME, ACTIVITY, DATE, HOUR, FLOOR}
     public enum Activity{REGISTERED,REMOVED,CHANGED,GO_TO_FLOOR}
@@ -17,14 +17,22 @@ public final class ReportControl {
         }
     private ReportControl() {
         reports = new ArrayList();
-
+        
+        importReports();
     }
 
     public void addReport(String employeeName, Activity activity, String thatName,
             String date, String hour, String floor) {
-
-        reports.add(new Report(employeeName, activity.toString(), thatName, date, hour, floor));
-    }
+        
+        Report r = new Report(
+                employeeName, activity.toString(), thatName, date, hour, floor);
+        reports.add(r);
+        
+        try {
+            StoreData.addReport(r);
+        } catch (FileNotFoundException ex) {}
+        
+        }
 
     public ArrayList<Report> getAllReports() {
         return reports;
@@ -94,5 +102,7 @@ public final class ReportControl {
         return list;   
     }
     
-    
+    private void importReports() {
+        reports = StoreData.getReportsCache();
+    }
 }

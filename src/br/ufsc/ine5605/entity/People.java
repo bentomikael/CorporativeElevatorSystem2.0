@@ -1,6 +1,8 @@
 package br.ufsc.ine5605.entity;
 
-public abstract class People {
+import java.io.Serializable;
+
+public abstract class People implements Serializable{
     protected String name;
     protected int age;
     public static enum Gender {

@@ -2,33 +2,35 @@ package br.ufsc.ine5605.controller;
 
 import br.ufsc.ine5605.Screen.ScreenView;
 import br.ufsc.ine5605.Screen.Signal;
-import br.ufsc.ine5605.corporative_elavator_system2.StoreData;
 import br.ufsc.ine5605.entity.People;
 import java.io.FileNotFoundException;
-import static java.lang.Thread.sleep;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import static java.lang.Thread.sleep;
 
 public final class MainControl {
+
     private static final MainControl INSTANCE = new MainControl();
 
     private static EmployeeControl eControl;
     private ScreenView screen;
     private static ReportControl rControl;
-    private int option;  //usada para manipular as opcoes recebidas de tela
     private Date date;
     private SimpleDateFormat format;
+    private int option;  //usada para manipular as opcoes recebidas de tela
     private boolean logged; // usado para saber quando está logado
 
-    public static MainControl getInstance(){
+    public static MainControl getInstance() {
         return INSTANCE;
     }
+
     private MainControl() {
         eControl = EmployeeControl.getIstance();
         screen = ScreenView.getIstance();
         rControl = ReportControl.getIstance();
-//        start();
+
+        start();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Manipulacão de tempo">
@@ -47,11 +49,11 @@ public final class MainControl {
 //</editor-fold> 
     //<editor-fold defaultstate="collapsed" desc="Login">
     private void start() {
+
         eControl.login(
                 screen.login(
                         eControl.getCodes(
                                 eControl.getAllEmployees())));
-
         home();
     }
 
@@ -89,7 +91,11 @@ public final class MainControl {
         if (option != -1) {
             try {
                 eControl.goToFloor(option);
-                reportsRegister(ReportControl.Activity.GO_TO_FLOOR, null);
+
+                try {
+                    reportsRegister(ReportControl.Activity.GO_TO_FLOOR, null);
+                } catch (FileNotFoundException ex) {
+                }
 
                 if (option == 0) {
                     screen.mLeavingFloor();
@@ -139,12 +145,16 @@ public final class MainControl {
 
             eControl.registerNewEmployee(
                     Integer.parseInt(newE.get(3).toString()),
-                    (People.Occupation) newE.get(4),
+                    People.Occupation.valueOf(newE.get(4).toString()),
                     newE.get(0).toString(),
-                    Integer.parseInt(newE.get(2).toString()),
-                    (People.Gender) newE.get(1));
+                    Integer.parseInt(newE.get(1).toString()),
+                    People.Gender.valueOf(newE.get(2).toString()));
 
-            reportsRegister(ReportControl.Activity.REGISTERED, newE.get(0));
+            try {
+                reportsRegister(ReportControl.Activity.REGISTERED, newE.get(0));
+            } catch (FileNotFoundException ex) {
+            }
+
             screen.mSuccessFulRegistered(newE.get(0).toString());
             home();
         }
@@ -153,14 +163,17 @@ public final class MainControl {
     private void delEmployee() {
         String name;
         name = screen.delEmployee(eControl.getNames(
-                eControl.getEmployeesByLevelAccess(
-                        eControl.getActualUserLevelNumber() - 1)));
+                eControl.getAllEmployees()));
 
         if (name != null) {
             if (eControl.getActualUserLevelNumber()
                     > eControl.getEmployeeByName(name).getAccessLevelNumber()) {
 
-                reportsRegister(ReportControl.Activity.REMOVED, name);
+                try {
+                    reportsRegister(ReportControl.Activity.REMOVED, name);
+                } catch (FileNotFoundException ex) {
+                }
+
                 eControl.removeEmployeeByCode(
                         eControl.getEmployeeByName(name).getCodeAccess());
                 screen.mSuccessFulRemoved(name);
@@ -177,17 +190,21 @@ public final class MainControl {
                 eControl.getNames(eControl.getAllEmployees()));
 
         if (!toChange.isEmpty()) {
-            if (eControl.getEmployeeByName(toChange.get(0).toString()).getAccessLevelNumber()
+            if (eControl.getEmployeeByName(
+                    toChange.get(0).toString()).getAccessLevelNumber()
                     < eControl.getActualUserLevelNumber()
-                    && Integer.parseInt(toChange.get(1).toString())
+                    && People.Occupation.valueOf(toChange.get(1).toString()).accessLevel
                     < eControl.getActualUserLevelNumber()) {
 
-                reportsRegister(ReportControl.Activity.CHANGED, toChange.get(0));
+                try {
+                    reportsRegister(ReportControl.Activity.CHANGED, toChange.get(0));
+                } catch (FileNotFoundException ex) {
+                }
 
                 eControl.changeOccupation(
                         eControl.getEmployeeByName(
                                 toChange.get(0).toString()).getCodeAccess(),
-                        People.Occupation.ADMINISTRATION);
+                        People.Occupation.valueOf(toChange.get(1).toString()));
 
                 screen.mSuccessFulAltered(toChange.get(0).toString());
                 home();
@@ -290,7 +307,7 @@ public final class MainControl {
     }
 
 //</editor-fold>
-    private void reportsRegister(ReportControl.Activity rep, Object nameThat) {
+    private void reportsRegister(ReportControl.Activity rep, Object nameThat) throws FileNotFoundException {
 
         switch (rep) {
 
@@ -373,28 +390,5 @@ public final class MainControl {
         }
 
     }
-    
-    //<editor-fold defaultstate="collapsed" desc="Persistencia">
-    public static ArrayList getEmployees(){
-        return eControl.getAllEmployees();
-    }
-    public static ArrayList getReports(){
-        return rControl.getAllReports();
-    }
-    public void exportEmployees() throws FileNotFoundException{
 
-        StoreData.exportEmployees();
-    }
-    public void inportEmployees() throws FileNotFoundException, ClassNotFoundException{
-        StoreData.importEmployees();
-    }
-    public void exportReports() throws FileNotFoundException{
-        StoreData.exportReports();
-    }
-    public void inportReports() throws FileNotFoundException, ClassNotFoundException{
-        StoreData.importReports();
-    }
-//</editor-fold>
-    
-    
 }

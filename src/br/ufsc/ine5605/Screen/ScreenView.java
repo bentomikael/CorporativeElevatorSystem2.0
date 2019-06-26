@@ -55,7 +55,7 @@ public final class ScreenView {
     public int login(ArrayList allCodes) {
         logoutRequest = false;
         //desativa menu bar
-        mainF.logged(false, null);
+        mainF.menuBar(false, null);
 
         boolean valid = false;
         showScreen(pLogin);
@@ -79,7 +79,7 @@ public final class ScreenView {
 
     public int home(String name, int actualUserLevel) {
         //ativa o menu bar
-        mainF.logged(true, name);
+        mainF.menuBar(true, name);
 
         //oculta botão administrativo se não tiver autorizacão
         if (actualUserLevel < 3) {
@@ -179,7 +179,6 @@ public final class ScreenView {
         do {
             showScreen(pNew);
             waitButton(pNew);
-
             if (allCodes.contains(pNew.getTfCode())) {
                 mAlreadyRegistered();
                 valid = false;
@@ -196,7 +195,6 @@ public final class ScreenView {
             newE.add(pNew.getTfCode());
             newE.add(pNew.getOccupation());
         }
-
         return newE;
     }
 

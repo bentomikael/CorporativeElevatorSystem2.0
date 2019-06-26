@@ -10,7 +10,7 @@ import javax.swing.UIManager;
  */
 public class CorporativeElavatorSystem2 {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException {
 
         //<editor-fold defaultstate="collapsed" desc="Alterar aparencia das janelas">
         try {
@@ -20,9 +20,8 @@ public class CorporativeElavatorSystem2 {
             System.out.println("erro ao aplicar aparencia no frame");
         }
 //</editor-fold>
-
-//        MainControl.getInstance().start();
-        MainControl.getInstance().exportEmployees();
+        new StoreData();
+        MainControl.getInstance();
         
         /*
      *          PRÉ REGISTRADOS

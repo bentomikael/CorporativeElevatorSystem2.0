@@ -1,5 +1,6 @@
 package br.ufsc.ine5605.Screen;
 
+import br.ufsc.ine5605.entity.People;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -63,11 +64,11 @@ public class ChangeEmployee extends JPanel implements IPanel{
         gbc.insets = new Insets(10, 0, 5, 0);
         rpane.add(new JLabel("New Occupation:"),gbc);        
         
-        rb_simple.setActionCommand("1");
-        rb_manager.setActionCommand("2");
-        rb_administrative.setActionCommand("3");
-        rb_executive.setActionCommand("4");
-        rb_ceo.setActionCommand("5");
+        rb_simple.setActionCommand(People.Occupation.SIMPLE_EMPLOYEE.name());
+        rb_manager.setActionCommand(People.Occupation.MANAGER.name());
+        rb_administrative.setActionCommand(People.Occupation.ADMINISTRATION.name());
+        rb_executive.setActionCommand(People.Occupation.EXECUTIVE.name());
+        rb_ceo.setActionCommand(People.Occupation.CEO.name());
         
         occupation.add(rb_simple);
         occupation.add(rb_manager);

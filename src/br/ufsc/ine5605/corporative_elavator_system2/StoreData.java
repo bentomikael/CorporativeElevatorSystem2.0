@@ -1,7 +1,8 @@
 package br.ufsc.ine5605.corporative_elavator_system2;
 
-import br.ufsc.ine5605.controller.MainControl;
 import br.ufsc.ine5605.entity.Employee;
+import br.ufsc.ine5605.entity.People;
+import br.ufsc.ine5605.entity.Report;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -9,15 +10,23 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class StoreData {
     private static final String EMPLOYEES = "Employees.dat";
     private static final String REPORTS = "Reports.dat";
-    private static ArrayList employeesCache;
-    private static ArrayList reportsCache;
+    private static HashMap<Integer,Report> reportsListCache;
+    private static HashMap<Integer,Employee> employeesListCache;
+    private static int repCount;
     
-    public StoreData(){}
+    public StoreData() throws FileNotFoundException, ClassNotFoundException {
+        reportsListCache = new HashMap();
+        employeesListCache = new HashMap();
+        repCount = 0;
+        importEmployees();
+        importReports();
+    }
     
     public static void exportEmployees() throws FileNotFoundException{
 
@@ -25,11 +34,11 @@ public class StoreData {
             FileOutputStream fileOut = new FileOutputStream(EMPLOYEES);
             ObjectOutputStream obj = new ObjectOutputStream(fileOut);
 
+            
             //escreve
-            obj.writeObject(employeesCache);
+            obj.writeObject(employeesListCache);            
             obj.flush();
             fileOut.flush();
-                                                    System.out.println("chegou");
 
             //fecha
             obj.close();
@@ -50,15 +59,14 @@ public class StoreData {
             FileInputStream fileIn = new FileInputStream(EMPLOYEES);
             ObjectInputStream obj = new ObjectInputStream(fileIn);
             
-            employeesCache.add(obj.readObject());
-            
+            employeesListCache = (HashMap<Integer, Employee>) obj.readObject();
             fileIn.close();
             obj.close();
             fileIn = null;
             obj = null;
             
         }catch(FileNotFoundException ex){
-            System.out.println(ex.getMessage());
+           new FileOutputStream(EMPLOYEES);
         }catch(IOException ex){
             System.out.println(ex.getMessage());
         }
@@ -71,7 +79,7 @@ public class StoreData {
             ObjectOutputStream obj = new ObjectOutputStream(fileOut);
             
             //escreve
-            obj.writeObject(MainControl.getReports());
+            obj.writeObject(reportsListCache);
             obj.flush();
             fileOut.flush();
             
@@ -94,7 +102,7 @@ public class StoreData {
             FileInputStream fileIn = new FileInputStream(REPORTS);
             ObjectInputStream obj = new ObjectInputStream(fileIn);
             
-            reportsCache.add(obj.readObject());
+            reportsListCache = (HashMap<Integer, Report>) obj.readObject();
             
             fileIn.close();
             obj.close();
@@ -102,11 +110,34 @@ public class StoreData {
             obj = null;
             
         }catch(FileNotFoundException ex){
-            System.out.println(ex.getMessage());
+            new FileOutputStream(REPORTS);
         }catch(IOException ex){
             System.out.println(ex.getMessage());
         }
     }
+        
+    public static ArrayList<Report> getReportsCache() {
+        return new ArrayList(reportsListCache.values());
+    }
+    public static ArrayList<Employee> getEmployeesCache(){
+        return new ArrayList(employeesListCache.values());
+    }
+    public static void modifyEmployee(int code,Employee.Occupation newAccessLevel) throws FileNotFoundException{
+        employeesListCache.get(code).setOccupation(newAccessLevel);
+        exportEmployees();
+    }
     
-    
+    public static void addEmployee(Employee e) throws FileNotFoundException{
+        employeesListCache.put(e.getCodeAccess(),e);
+        exportEmployees();
+    }
+    public static void delEmployeeByCode(int code) throws FileNotFoundException{
+        employeesListCache.remove(code);
+        exportEmployees();
+    }
+    public static void addReport(Report r) throws FileNotFoundException{
+        reportsListCache.put(++repCount,r);
+        exportReports();
+    }
+       
 }

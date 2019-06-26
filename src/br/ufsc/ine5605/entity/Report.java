@@ -1,6 +1,8 @@
 package br.ufsc.ine5605.entity;
 
-public class Report {
+import java.io.Serializable;
+
+public class Report implements Serializable{
     private final String employeeName; // usuario atual
     private final String activity; // Registered , Removed , Changed, Go To Floor
     private final String thatName; // usuario secundario, qual foi alterado

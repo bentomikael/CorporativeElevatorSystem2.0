@@ -1,7 +1,11 @@
 package br.ufsc.ine5605.controller;
 
+import br.ufsc.ine5605.corporative_elavator_system2.StoreData;
 import br.ufsc.ine5605.entity.Employee;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class EmployeeControl {
     private static final EmployeeControl INSTANCE = new EmployeeControl();
@@ -14,12 +18,7 @@ public final class EmployeeControl {
         }
     private EmployeeControl() {
         employees = new ArrayList();
-
-        employees.add(new Employee(999, Employee.Occupation.CEO, "goku", 23, Employee.Gender.MALE)); //TESTE, apagar depois
-        employees.add(new Employee(888, Employee.Occupation.EXECUTIVE, "vegeta", 22, Employee.Gender.MALE)); //TESTE, apagar depois
-        employees.add(new Employee(777, Employee.Occupation.ADMINISTRATION, "joao amoedo", 10, Employee.Gender.MALE)); //TESTE, apagar depois
-        employees.add(new Employee(666, Employee.Occupation.MANAGER, "bolsonaro", 40, Employee.Gender.MALE)); //TESTE, apagar depois
-        employees.add(new Employee(555, Employee.Occupation.SIMPLE_EMPLOYEE, "dilma", 30, Employee.Gender.FEMALE)); //TESTE, apagar depois
+        importEmployees();
     }
 
     //<editor-fold defaultstate="collapsed" desc="Usuario Logado">
@@ -63,12 +62,12 @@ public final class EmployeeControl {
     //</editor-fold>
     //<editor-fold desc="gets de funcionarios">
     // retorna todos funcionarios cadastrados
-    public ArrayList getAllEmployees() {
+    public ArrayList<Employee> getAllEmployees() {
         return employees;
     }
 
     //retorna todos funcionarios que estão em algum andar
-    public ArrayList getEmployeesInWork() {
+    public ArrayList<Employee> getEmployeesInWork() {
         ArrayList<Employee> list = new ArrayList();
         for (Employee e : employees) {
             if (e.getCurrentFloor() != 0) {
@@ -79,7 +78,7 @@ public final class EmployeeControl {
     }
 
     //retorna funcionarios de determinado andar
-    public ArrayList getEmployeesByFloor(int floor) {
+    public ArrayList<Employee> getEmployeesByFloor(int floor) {
         ArrayList<Employee> list = new ArrayList();
         for (Employee e : employees) {
             if (e.getCurrentFloor() == floor) {
@@ -90,7 +89,7 @@ public final class EmployeeControl {
     }
 
     //retorna uma lista com funcionarios com determinado nivel de acesso
-    public ArrayList getEmployeesByLevelAccess(int level) {
+    public ArrayList<Employee> getEmployeesByLevelAccess(int level) {
         ArrayList<Employee> list = new ArrayList();
 
         for (Employee e : employees) {
@@ -149,30 +148,47 @@ public final class EmployeeControl {
 //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Manipulacão de usuarios">
     //registra funcionario
-    public Employee registerNewEmployee(int code, Employee.Occupation accessLevel, String name, int age, Employee.Gender gender) {
-        employees.add(new Employee(code, accessLevel, name, age, gender));
-
-        return getEmployeeByCode(code);
+    public void registerNewEmployee(
+            int code, Employee.Occupation accessLevel, String name, int age, Employee.Gender gender) 
+             {
+        
+        Employee e = new Employee(code, accessLevel, name, age, gender);
+        employees.add(e);
+        
+        try {
+            StoreData.addEmployee(e);
+        } catch (FileNotFoundException ex) {}
     }
 
     //remove funcionario pelo codigo
     public void removeEmployeeByCode(int code) {
 
         employees.remove(getEmployeeByCode(code));
-
+        
+        try {
+            StoreData.delEmployeeByCode(code);
+        } catch (FileNotFoundException ex) {}
+        
     }
 
     //altera nivel de acesso de outro funcionario
     public void changeOccupation(int code, Employee.Occupation newAccessLevel) {
         getEmployeeByCode(code).setOccupation(newAccessLevel);
+        
+        try {
+            StoreData.modifyEmployee(code, newAccessLevel);
+        } catch (FileNotFoundException ex) {}
+        
     }
-
-    //</editor-fold>
+    
     //entra no andar
     public void goToFloor(int floor) {
         getActualUser().setCurrentFloor(floor);
     }
 
+    //</editor-fold>
+    
+    
     public Object[][] getList(ArrayList<Employee> array) {
 
         Object[][] list = new Object[array.size()][5];
@@ -187,5 +203,8 @@ public final class EmployeeControl {
         return list;
     }
 
+    private void importEmployees() {
+        employees = StoreData.getEmployeesCache();  
+    }
     
 }

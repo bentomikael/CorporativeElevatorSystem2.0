@@ -1,6 +1,8 @@
 package br.ufsc.ine5605.entity;
 
-public class Employee extends People {
+import java.io.Serializable;
+
+public class Employee extends People implements Serializable{
     private final int code;
     private Occupation accessLevel;
     private int currentFloor;

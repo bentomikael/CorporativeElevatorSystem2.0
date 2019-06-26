@@ -61,11 +61,11 @@ public class MainFrame extends JFrame implements IPanel {
     /**
      * Quando logado mostrar menu bar personalizado
      *
-     * @param logged está logado?
+     * @param show define se sera visivel
      * @param name nome do usuario atual
      */
-    public void logged(boolean logged, String name) {
-        if (logged) {
+    public void menuBar(boolean show, String name) {
+        if (show) {
             bt_logout.setVisible(true);
             lb_userName.setText("Hello " + name.toUpperCase());
         } else {
