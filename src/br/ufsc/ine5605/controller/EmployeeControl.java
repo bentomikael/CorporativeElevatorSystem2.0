@@ -1,11 +1,8 @@
 package br.ufsc.ine5605.controller;
 
-import br.ufsc.ine5605.corporative_elavator_system2.StoreData;
 import br.ufsc.ine5605.entity.Employee;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public final class EmployeeControl {
     private static final EmployeeControl INSTANCE = new EmployeeControl();

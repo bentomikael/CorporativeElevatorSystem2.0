@@ -1,6 +1,5 @@
 package br.ufsc.ine5605.controller;
 
-import br.ufsc.ine5605.corporative_elavator_system2.StoreData;
 import br.ufsc.ine5605.entity.Report;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

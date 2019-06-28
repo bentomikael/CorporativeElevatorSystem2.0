@@ -12,7 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
-class Administrative extends JPanel implements IPanel {
+public class Administrative extends JPanel implements IPanel {
 
     private Signal signal,
                    option;

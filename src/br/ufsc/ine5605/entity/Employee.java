@@ -1,5 +1,6 @@
 package br.ufsc.ine5605.entity;
 
+import br.ufsc.ine5605.exception.AlreadyInFloorException;
 import java.io.Serializable;
 
 public class Employee extends People implements Serializable{
@@ -31,7 +32,7 @@ public class Employee extends People implements Serializable{
     
     public void setCurrentFloor(int currentFloor) {
         if(this.currentFloor == currentFloor)
-            throw new IllegalArgumentException("YOU ALREADY IN THIS FLOOR");
+            throw new AlreadyInFloorException();
         else
             this.currentFloor = currentFloor;
     }

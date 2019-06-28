@@ -1,7 +1,6 @@
-package br.ufsc.ine5605.corporative_elavator_system2;
+package br.ufsc.ine5605.controller;
 
 import br.ufsc.ine5605.entity.Employee;
-import br.ufsc.ine5605.entity.People;
 import br.ufsc.ine5605.entity.Report;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,23 +11,32 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 public class StoreData {
+    private static final StoreData INSTANCE = new StoreData();
+    
     private static final String EMPLOYEES = "Employees.dat";
     private static final String REPORTS = "Reports.dat";
     private static HashMap<Integer,Report> reportsListCache;
     private static HashMap<Integer,Employee> employeesListCache;
     private static int repCount;
     
-    public StoreData() throws FileNotFoundException, ClassNotFoundException {
+    private StoreData() {
         reportsListCache = new HashMap();
         employeesListCache = new HashMap();
         repCount = 0;
-        importEmployees();
-        importReports();
+        
+        try {
+            importEmployees();
+        }catch (FileNotFoundException ex) {} 
+        catch (ClassNotFoundException ex) {}
+        try {
+            importReports();
+        }catch (FileNotFoundException ex) {} 
+        catch (ClassNotFoundException ex) {}
+        
     }
     
-    public static void exportEmployees() throws FileNotFoundException{
+    private static void exportEmployees() throws FileNotFoundException{
 
         try{
             FileOutputStream fileOut = new FileOutputStream(EMPLOYEES);
@@ -54,7 +62,7 @@ public class StoreData {
         
             
     }
-    public static void importEmployees() throws FileNotFoundException, ClassNotFoundException{
+    private static void importEmployees() throws FileNotFoundException, ClassNotFoundException{
         try{
             FileInputStream fileIn = new FileInputStream(EMPLOYEES);
             ObjectInputStream obj = new ObjectInputStream(fileIn);
@@ -72,7 +80,7 @@ public class StoreData {
         }
     }
     
-    public static void exportReports() throws FileNotFoundException{
+    private static void exportReports() throws FileNotFoundException{
         
         try{
             FileOutputStream fileOut = new FileOutputStream(REPORTS);
@@ -97,7 +105,7 @@ public class StoreData {
         
             
     }
-    public static void importReports() throws FileNotFoundException, ClassNotFoundException{
+    private static void importReports() throws FileNotFoundException, ClassNotFoundException{
         try{
             FileInputStream fileIn = new FileInputStream(REPORTS);
             ObjectInputStream obj = new ObjectInputStream(fileIn);
@@ -122,13 +130,13 @@ public class StoreData {
     public static ArrayList<Employee> getEmployeesCache(){
         return new ArrayList(employeesListCache.values());
     }
-    public static void modifyEmployee(int code,Employee.Occupation newAccessLevel) throws FileNotFoundException{
-        employeesListCache.get(code).setOccupation(newAccessLevel);
-        exportEmployees();
-    }
     
     public static void addEmployee(Employee e) throws FileNotFoundException{
         employeesListCache.put(e.getCodeAccess(),e);
+        exportEmployees();
+    }
+    public static void modifyEmployee(int code,Employee.Occupation newAccessLevel) throws FileNotFoundException{
+        employeesListCache.get(code).setOccupation(newAccessLevel);
         exportEmployees();
     }
     public static void delEmployeeByCode(int code) throws FileNotFoundException{
@@ -139,5 +147,6 @@ public class StoreData {
         reportsListCache.put(++repCount,r);
         exportReports();
     }
+    
        
 }

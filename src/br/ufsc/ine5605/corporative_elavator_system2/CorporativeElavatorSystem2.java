@@ -1,7 +1,6 @@
 package br.ufsc.ine5605.corporative_elavator_system2;
 
 import br.ufsc.ine5605.controller.MainControl;
-import java.io.FileNotFoundException;
 import javax.swing.UIManager;
 
 /**
@@ -10,7 +9,7 @@ import javax.swing.UIManager;
  */
 public class CorporativeElavatorSystem2 {
 
-    public static void main(String[] args) throws FileNotFoundException, ClassNotFoundException {
+    public static void main(String[] args) {
 
         //<editor-fold defaultstate="collapsed" desc="Alterar aparencia das janelas">
         try {
@@ -20,7 +19,6 @@ public class CorporativeElavatorSystem2 {
             System.out.println("erro ao aplicar aparencia no frame");
         }
 //</editor-fold>
-        new StoreData();
         MainControl.getInstance();
         
         /*

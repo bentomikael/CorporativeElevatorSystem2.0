@@ -1,5 +1,7 @@
 package br.ufsc.ine5605.Screen;
 
+import br.ufsc.ine5605.entity.People;
+import br.ufsc.ine5605.exception.NoNumberException;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,6 +87,9 @@ public final class ScreenView {
         if (actualUserLevel < 3) {
             pHome.getComponent(1).setVisible(false);
         }
+        else{
+            pHome.getComponent(1).setVisible(true);           
+        }
 
         showScreen(pHome);
         waitButton(pHome);
@@ -101,18 +106,25 @@ public final class ScreenView {
     }
 
     public int floor(int actualUserLevel) {
-        if (actualUserLevel < 2) {
+        if (actualUserLevel < 2) 
             pFloor.getComponent(2).setVisible(false);
-        }
-        if (actualUserLevel < 3) {
+        else 
+            pFloor.getComponent(2).setVisible(true);
+        
+        if (actualUserLevel < 3) 
             pFloor.getComponent(3).setVisible(false);
-        }
-        if (actualUserLevel < 4) {
+        else 
+            pFloor.getComponent(3).setVisible(true);
+        
+        if (actualUserLevel < 4) 
             pFloor.getComponent(4).setVisible(false);
-        }
-        if (actualUserLevel < 5) {
+        else 
+            pFloor.getComponent(4).setVisible(true);
+        
+        if (actualUserLevel < 5) 
             pFloor.getComponent(5).setVisible(false);
-        }
+        else 
+            pFloor.getComponent(5).setVisible(true);
 
         showScreen(pFloor);
         waitButton(pFloor);
@@ -173,22 +185,31 @@ public final class ScreenView {
     }
 
     public ArrayList newEmployee(int actualUserLevel, ArrayList allCodes) {
-        boolean valid = true;
+        boolean valid =  true;
+        People.Occupation occupation = null;
         ArrayList newE = new ArrayList();
-
+    
         do {
             showScreen(pNew);
             waitButton(pNew);
-            if (allCodes.contains(pNew.getTfCode())) {
+            
+            if(logoutRequest){
+                newE = null;
+                break;
+            }
+            if (allCodes.contains(Integer.parseInt(pNew.getTfCode()) )) {
                 mAlreadyRegistered();
                 valid = false;
             }
+            if(actualUserLevel != 5)
+                if(occupation.valueOf(pNew.getOccupation()).accessLevel >=
+                        actualUserLevel){
+                    valid = false;
+                    mDontHavePermision();
+                }
+        } while (!valid);
 
-        } while (!valid && !logoutRequest);
-
-        if (logoutRequest) {
-            newE = null;
-        } else {
+        if (!logoutRequest) {
             newE.add(pNew.getTfName());
             newE.add(pNew.getAge());
             newE.add(pNew.getGender());
@@ -200,7 +221,7 @@ public final class ScreenView {
 
     public String delEmployee(ArrayList listNames) {
         String name = null;
-
+        
         showScreen(pDel);
         pDel.setList(listNames.toArray());
         waitButton(pDel);
@@ -285,6 +306,12 @@ public final class ScreenView {
 
     public void table(Signal typeList, Object[][] volues) {
         pTable.setListConfig(pTable.setListType(typeList), volues);
+        
+        if(volues.length == 0)
+            pTable.emptyTable(true);
+        else
+            pTable.emptyTable(false);
+        
         showScreen(pTable);
         waitButton(pTable);
     }
@@ -397,6 +424,7 @@ public final class ScreenView {
         }
 
         String x = null;
+        int y = 0;            
         do {
 
             x = (String) JOptionPane.showInputDialog(
@@ -409,7 +437,13 @@ public final class ScreenView {
                 x = "-1";
             }
 
-        } while (Integer.parseInt(x) < 0 || Integer.parseInt(x) > 30);
+            try{
+                y = Integer.parseInt(x);
+            }catch(NoNumberException ex){
+                JOptionPane.showConfirmDialog(null, ex.getMessage());
+            }
+            
+        } while (y <= 0 || y > 30);
 
         return x;
     }

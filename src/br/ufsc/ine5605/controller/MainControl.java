@@ -2,8 +2,8 @@ package br.ufsc.ine5605.controller;
 
 import br.ufsc.ine5605.Screen.ScreenView;
 import br.ufsc.ine5605.Screen.Signal;
+import br.ufsc.ine5605.exception.AlreadyInFloorException;
 import br.ufsc.ine5605.entity.People;
-import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +29,7 @@ public final class MainControl {
         eControl = EmployeeControl.getIstance();
         screen = ScreenView.getIstance();
         rControl = ReportControl.getIstance();
-
+        
         start();
     }
 
@@ -48,8 +48,7 @@ public final class MainControl {
 
 //</editor-fold> 
     //<editor-fold defaultstate="collapsed" desc="Login">
-    private void start() {
-
+    private void start() {        
         eControl.login(
                 screen.login(
                         eControl.getCodes(
@@ -91,12 +90,9 @@ public final class MainControl {
         if (option != -1) {
             try {
                 eControl.goToFloor(option);
-
-                try {
-                    reportsRegister(ReportControl.Activity.GO_TO_FLOOR, null);
-                } catch (FileNotFoundException ex) {
-                }
-
+                
+                reportsRegister(ReportControl.Activity.GO_TO_FLOOR, null);
+                
                 if (option == 0) {
                     screen.mLeavingFloor();
                 } else {
@@ -104,7 +100,7 @@ public final class MainControl {
                 }
                 logout();
 
-            } catch (IllegalArgumentException e) {
+            } catch (AlreadyInFloorException e) {
                 screen.mAlreadyInFloor();
                 floor();
             }
@@ -150,10 +146,7 @@ public final class MainControl {
                     Integer.parseInt(newE.get(1).toString()),
                     People.Gender.valueOf(newE.get(2).toString()));
 
-            try {
-                reportsRegister(ReportControl.Activity.REGISTERED, newE.get(0));
-            } catch (FileNotFoundException ex) {
-            }
+             reportsRegister(ReportControl.Activity.REGISTERED, newE.get(0));
 
             screen.mSuccessFulRegistered(newE.get(0).toString());
             home();
@@ -169,15 +162,16 @@ public final class MainControl {
             if (eControl.getActualUserLevelNumber()
                     > eControl.getEmployeeByName(name).getAccessLevelNumber()) {
 
-                try {
-                    reportsRegister(ReportControl.Activity.REMOVED, name);
-                } catch (FileNotFoundException ex) {
-                }
+                reportsRegister(ReportControl.Activity.REMOVED, name);
 
                 eControl.removeEmployeeByCode(
                         eControl.getEmployeeByName(name).getCodeAccess());
                 screen.mSuccessFulRemoved(name);
 
+                home();
+            }
+            else{
+                screen.mDontHavePermision();
                 home();
             }
         }
@@ -196,10 +190,7 @@ public final class MainControl {
                     && People.Occupation.valueOf(toChange.get(1).toString()).accessLevel
                     < eControl.getActualUserLevelNumber()) {
 
-                try {
-                    reportsRegister(ReportControl.Activity.CHANGED, toChange.get(0));
-                } catch (FileNotFoundException ex) {
-                }
+                reportsRegister(ReportControl.Activity.CHANGED, toChange.get(0));
 
                 eControl.changeOccupation(
                         eControl.getEmployeeByName(
@@ -307,7 +298,7 @@ public final class MainControl {
     }
 
 //</editor-fold>
-    private void reportsRegister(ReportControl.Activity rep, Object nameThat) throws FileNotFoundException {
+    private void reportsRegister(ReportControl.Activity rep, Object nameThat) {
 
         switch (rep) {
 
